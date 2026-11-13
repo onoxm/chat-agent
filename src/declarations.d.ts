@@ -1,8 +1,6 @@
 /// <reference types="@electron-forge/plugin-vite/forge-vite-env" />
 import { type AgentOptions, WindowAction } from "./types";
 
-declare module "*.css";
-
 export interface IElectronAPI {
   windowAction: (action: WindowAction) => void;
   chatWithAgent: (

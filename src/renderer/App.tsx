@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Message, Model, modelList, WindowAction } from "../types";
+import { Message, Model, modelList } from "../types";
+import { HeadBar } from "./components";
+import { AsideBar } from "./components/asideBar";
 
 export default () => {
   const windowAction = window.electronAPI.windowAction;
@@ -61,73 +63,58 @@ export default () => {
   }, [messages]);
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-between gap-4 p-4">
-      <div className="flex items-center justify-center gap-4">
-        <button
-          className="cursor-pointer"
-          onClick={() => windowAction(WindowAction.Minimize)}
-        >
-          minimize
-        </button>
-        <button
-          className="cursor-pointer"
-          onClick={() => windowAction(WindowAction.Maximize)}
-        >
-          maximize
-        </button>
-        <button
-          className="cursor-pointer"
-          onClick={() => windowAction(WindowAction.Close)}
-        >
-          close
-        </button>
-      </div>
+    <div className="w-screen h-screen flex flex-col">
+      <HeadBar />
 
-      <div className="flex flex-col items-center justify-center gap-4">
-        <div
-          ref={messagesRef}
-          className="w-[633px] h-100 flex flex-col gap-2 overflow-y-auto border border-gray-300 rounded-lg p-4 overflow-x-hidden overflow-y-auto"
-        >
-          {messages.map(({ role, content }, i) => (
-            <p key={i}>
-              <strong>{role}:</strong> {content}
-            </p>
-          ))}
-        </div>
+      <div className="flex flex-1">
+        <AsideBar />
 
-        <div>
-          <input
-            className="w-96 h-10 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Chat with Ollama..."
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSendMessage();
-              }
-            }}
-          />
-
-          <select
-            className="ml-4 cursor-pointer px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 border border-gray-300"
-            disabled={isStreaming}
-            value={model}
-            onChange={(e) => setModel(e.target.value as Model)}
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 p-4">
+          <div
+            ref={messagesRef}
+            className="w-[633px] h-100 flex flex-col gap-2 overflow-y-auto border border-gray-300 rounded-lg p-4 overflow-x-hidden overflow-y-auto"
           >
-            {modelList.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
+            {messages.map(({ role, content }, i) => (
+              <p key={i}>
+                <strong>{role}:</strong> {content}
+              </p>
             ))}
-          </select>
+          </div>
 
-          <button
-            className="cursor-pointer ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={handleSendMessage}
-            disabled={isStreaming}
-          >
-            {isStreaming ? "生成中..." : "发送"}
-          </button>
+          <div>
+            <input
+              className="w-96 h-10 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Chat with Ollama..."
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessage();
+                }
+              }}
+            />
+
+            <select
+              className="ml-4 cursor-pointer px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 border border-gray-300"
+              disabled={isStreaming}
+              value={model}
+              onChange={(e) => setModel(e.target.value as Model)}
+            >
+              {modelList.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+
+            <button
+              className="cursor-pointer ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleSendMessage}
+              disabled={isStreaming}
+            >
+              {isStreaming ? "生成中..." : "发送"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

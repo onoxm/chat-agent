@@ -14,7 +14,8 @@
 
 import { createRoot } from "react-dom/client";
 import "virtual:uno.css";
-import "./i18n";
 import App from "./App";
+import "./i18n";
+import "./index.css";
 
 createRoot(document.getElementById("app")!).render(<App />);

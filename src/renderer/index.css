@@ -1,0 +1,7 @@
+.drag {
+    app-region: drag;
+}
+
+.no-drag {
+    app-region: no-drag;
+}
