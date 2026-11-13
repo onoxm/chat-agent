@@ -4,8 +4,8 @@ import {
   SidebarSimpleIcon,
   XIcon,
 } from "@phosphor-icons/react";
-import { WindowAction } from "../../types";
-import { useStore } from "../store";
+import { WindowAction } from "@types";
+import { useStore } from "@/store";
 
 const titleBarIconSize = 24;
 
@@ -15,15 +15,15 @@ export const HeadBar = () => {
   const windowBtnList = [
     {
       action: WindowAction.Minimize,
-      icon: <ArrowsInSimpleIcon size={titleBarIconSize} color='green' />,
+      icon: <ArrowsInSimpleIcon size={titleBarIconSize} color="green" />,
     },
     {
       action: WindowAction.Maximize,
-      icon: <FrameCornersIcon size={titleBarIconSize} color='orange'/>,
+      icon: <FrameCornersIcon size={titleBarIconSize} color="orange" />,
     },
     {
       action: WindowAction.Close,
-      icon: <XIcon size={titleBarIconSize} color='red' />,
+      icon: <XIcon size={titleBarIconSize} color="red" />,
     },
   ];
 

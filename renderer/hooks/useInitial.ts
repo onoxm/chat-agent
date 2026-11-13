@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useStore } from "../store";
+import { useStore } from "@/store";
 
 export const useInitial = () => {
   const { i18n } = useTranslation();

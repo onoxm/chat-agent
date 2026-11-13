@@ -1,5 +1,5 @@
 import { ChatOllama } from "@langchain/ollama";
-import { Model } from "../../types";
+import { Model } from "@types";
 
 export const createModel = ({ modelName }: { modelName: Model }) => {
   return new ChatOllama({

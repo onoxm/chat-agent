@@ -11,7 +11,7 @@ import {
   CHANNELS,
   type ChatRequestOptions,
   type ChatStreamPayload,
-} from "../../types";
+} from "@types";
 import { createModel } from "./agent";
 
 const schema = z.object({

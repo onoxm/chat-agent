@@ -9,7 +9,24 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+
+    "paths": {
+      "@main/*": ["./main/*"],
+      "@types": ["./types"],
+      "@types/*": ["./types/*"],
+      "@common": ["./common"],
+      "@locales/*": ["./locales/*"],
+      "@/*": ["./renderer/*"]
+    }
   },
-  "include": ["src/**/*", "*.ts", "*.mts"]
+  "include": [
+    "main/**/*",
+    "common/**/*",
+    "preload/**/*",
+    "renderer/**/*",
+    "types/**/*",
+    "*.ts",
+    "*.mts"
+  ]
 }

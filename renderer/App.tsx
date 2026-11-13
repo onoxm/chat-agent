@@ -1,9 +1,8 @@
+import { Message, Model, modelList } from "@types";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Message, Model, modelList } from "../types";
-import { HeadBar } from "./components";
-import { AsideBar } from "./components/asideBar";
-import { useInitial } from "./hooks";
+import { AsideBar, HeadBar } from "@/components";
+import { useInitial } from "@/hooks";
 
 export default () => {
   const { t } = useTranslation();

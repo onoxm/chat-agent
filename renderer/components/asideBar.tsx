@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useStore } from "../store";
+import { useStore } from "@/store";
 
 export const AsideBar = () => {
   const { i18n } = useTranslation();

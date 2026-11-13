@@ -1,5 +1,5 @@
 import { BrowserWindow, IpcMainEvent } from "electron";
-import { CHANNELS, WindowAction } from "../../types";
+import { CHANNELS, WindowAction } from "@types";
 
 export const windowBasicAction = {
   channel: CHANNELS.WINDOW_ACTION,

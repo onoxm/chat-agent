@@ -1,11 +1,11 @@
 // preload.js
-import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
 import {
   CHANNELS,
   WindowAction,
   type AgentOptions,
   type ChatStreamPayload,
-} from "../types";
+} from "@types";
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
 
 const apiKey = "electronAPI";
 
