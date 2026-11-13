@@ -15,20 +15,20 @@ export const HeadBar = () => {
   const windowBtnList = [
     {
       action: WindowAction.Minimize,
-      icon: <ArrowsInSimpleIcon size={titleBarIconSize} />,
+      icon: <ArrowsInSimpleIcon size={titleBarIconSize} color='green' />,
     },
     {
       action: WindowAction.Maximize,
-      icon: <FrameCornersIcon size={titleBarIconSize} />,
+      icon: <FrameCornersIcon size={titleBarIconSize} color='orange'/>,
     },
     {
       action: WindowAction.Close,
-      icon: <XIcon size={titleBarIconSize} />,
+      icon: <XIcon size={titleBarIconSize} color='red' />,
     },
   ];
 
   return (
-    <div className="w-full h-10 shrink-0 flex items-center justify-between gap-4 drag p-2">
+    <div className="w-full h-10 shrink-0 flex items-center justify-between gap-4 drag p-2 border-b border-gray-300">
       <button
         className="cursor-pointer no-drag"
         onClick={() => {
@@ -40,7 +40,7 @@ export const HeadBar = () => {
         <SidebarSimpleIcon size={titleBarIconSize} />
       </button>
 
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         {windowBtnList.map(({ action, icon }) => (
           <button
             key={action}

@@ -1,5 +1,5 @@
 /// <reference types="@electron-forge/plugin-vite/forge-vite-env" />
-import { type AgentOptions, WindowAction } from "./types";
+import { type AgentOptions, WindowAction } from "../types";
 
 export interface IElectronAPI {
   windowAction: (action: WindowAction) => void;

@@ -14,6 +14,8 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 800,
+    minHeight: 600,
     titleBarStyle: "hidden",
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
@@ -33,7 +35,7 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-let tray: Tray;
+let _tray: Tray;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -68,7 +70,7 @@ app.whenReady().then(() => {
     ipcMain.handle(channel, handle),
   );
 
-  tray = createTray();
+  _tray = createTray();
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.

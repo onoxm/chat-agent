@@ -1,5 +1,7 @@
 {
   "translation": {
-    "Welcome to React": "欢迎使用 React 和 react-i18next"
+    "placeholder": "请输入内容",
+    "send": "发送",
+    "generating": "生成中..."
   }
 }

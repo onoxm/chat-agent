@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Message, Model, modelList } from "../types";
 import { HeadBar } from "./components";
 import { AsideBar } from "./components/asideBar";
+import { useInitial } from "./hooks";
 
 export default () => {
-  const windowAction = window.electronAPI.windowAction;
+  const { t } = useTranslation();
 
   const [value, setValue] = useState("");
   const [model, setModel] = useState<Model>("deepseek-r1");
@@ -62,6 +64,8 @@ export default () => {
     messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
   }, [messages]);
 
+  useInitial();
+
   return (
     <div className="w-screen h-screen flex flex-col">
       <HeadBar />
@@ -72,7 +76,7 @@ export default () => {
         <div className="flex flex-1 flex-col items-center justify-center gap-4 p-4">
           <div
             ref={messagesRef}
-            className="w-[633px] h-100 flex flex-col gap-2 overflow-y-auto border border-gray-300 rounded-lg p-4 overflow-x-hidden overflow-y-auto"
+            className="w-full flex-1 flex flex-col gap-2 overflow-y-auto border border-gray-300 rounded-lg p-4 overflow-x-hidden overflow-y-auto"
           >
             {messages.map(({ role, content }, i) => (
               <p key={i}>
@@ -81,10 +85,10 @@ export default () => {
             ))}
           </div>
 
-          <div>
+          <div className="w-full flex">
             <input
-              className="w-96 h-10 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Chat with Ollama..."
+              className="flex-1 h-10 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder={t("placeholder")}
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onKeyDown={(e) => {
@@ -112,7 +116,7 @@ export default () => {
               onClick={handleSendMessage}
               disabled={isStreaming}
             >
-              {isStreaming ? "生成中..." : "发送"}
+              {isStreaming ? t("generating") : t("send")}
             </button>
           </div>
         </div>
