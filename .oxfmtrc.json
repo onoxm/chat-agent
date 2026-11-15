@@ -1,5 +1,31 @@
 {
-  "singleQuote": true,
+  "arrowParens": "avoid",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "embeddedLanguageFormatting": "auto",
+  "htmlWhitespaceSensitivity": "strict",
+  "jsxSingleQuote": false,
   "printWidth": 80,
-  "sortPackageJson": false
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "semi": false,
+  "singleAttributePerLine": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "none",
+  "useTabs": false,
+  "vueIndentScriptAndStyle": true,
+  "endOfLine": "lf",
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "out/**",
+    "dist/**",
+    ".vscode/**",
+    "node_modules/**",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    ".gitignore",
+    ".gitattributes",
+    "**/onoxm-auto-router.d.ts"
+  ]
 }

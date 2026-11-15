@@ -1,69 +1,69 @@
-import { Message, Model, modelList } from "@types";
-import { useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { AsideBar, HeadBar } from "@/components";
-import { useInitial } from "@/hooks";
+import { AsideBar, HeadBar } from '@/components'
+import { useInitial } from '@/hooks'
+import { Message, Model, modelList } from '@types'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const [value, setValue] = useState("");
-  const [model, setModel] = useState<Model>("deepseek-r1");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isStreaming, setIsStreaming] = useState(false);
+  const [value, setValue] = useState('')
+  const [model, setModel] = useState<Model>('deepseek-r1')
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isStreaming, setIsStreaming] = useState(false)
 
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null)
 
   const handleSendMessage = () => {
-    if (!value || isStreaming) return;
+    if (!value || isStreaming) return
 
     const currentMessages: Message[] = [
       ...messages,
-      { role: "user", content: value },
-    ];
-    setValue("");
+      { role: 'user', content: value }
+    ]
+    setValue('')
     // 先追加一条空的 assistant 消息，流式分片都往这条里拼
-    setMessages([...currentMessages, { role: "assistant", content: "" }]);
-    setIsStreaming(true);
+    setMessages([...currentMessages, { role: 'assistant', content: '' }])
+    setIsStreaming(true)
 
     window.electronAPI.chatWithAgent(
       {
         model,
-        messages: currentMessages,
+        messages: currentMessages
       },
-      (content) => {
-        setMessages((prev) => {
-          const next = [...prev];
-          const last = next[next.length - 1];
+      content => {
+        setMessages(prev => {
+          const next = [...prev]
+          const last = next[next.length - 1]
           next[next.length - 1] = {
             ...last,
-            content: last.content + content,
-          };
-          return next;
-        });
+            content: last.content + content
+          }
+          return next
+        })
       },
       () => setIsStreaming(false),
-      (message) => {
-        setMessages((prev) => {
-          const next = [...prev];
-          const last = next[next.length - 1];
+      message => {
+        setMessages(prev => {
+          const next = [...prev]
+          const last = next[next.length - 1]
           next[next.length - 1] = {
             ...last,
-            content: `${last.content}\n请求失败：${message}`,
-          };
-          return next;
-        });
-        setIsStreaming(false);
-      },
-    );
-  };
+            content: `${last.content}\n请求失败：${message}`
+          }
+          return next
+        })
+        setIsStreaming(false)
+      }
+    )
+  }
 
   useEffect(() => {
-    if (!messagesRef.current) return;
-    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-  }, [messages]);
+    if (!messagesRef.current) return
+    messagesRef.current.scrollTop = messagesRef.current.scrollHeight
+  }, [messages])
 
-  useInitial();
+  useInitial()
 
   return (
     <div className="w-screen h-screen flex flex-col">
@@ -85,14 +85,14 @@ export default () => {
           </div>
 
           <div className="w-full flex">
-            <input
-              className="flex-1 h-10 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder={t("placeholder")}
+            <textarea
+              className="flex-1 min-h-[1lh] max-h-[10lh] px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent field-sizing-content resize-none"
+              placeholder={t('placeholder')}
               value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSendMessage();
+              onChange={e => setValue(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  handleSendMessage()
                 }
               }}
             />
@@ -101,9 +101,9 @@ export default () => {
               className="ml-4 cursor-pointer px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 border border-gray-300"
               disabled={isStreaming}
               value={model}
-              onChange={(e) => setModel(e.target.value as Model)}
+              onChange={e => setModel(e.target.value as Model)}
             >
-              {modelList.map((m) => (
+              {modelList.map(m => (
                 <option key={m} value={m}>
                   {m}
                 </option>
@@ -115,11 +115,11 @@ export default () => {
               onClick={handleSendMessage}
               disabled={isStreaming}
             >
-              {isStreaming ? t("generating") : t("send")}
+              {isStreaming ? t('generating') : t('send')}
             </button>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

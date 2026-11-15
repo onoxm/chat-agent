@@ -1,22 +1,25 @@
-import { BrowserWindow, IpcMainEvent } from "electron";
-import { CHANNELS, WindowAction } from "@types";
+import { CHANNELS, WindowAction } from '@types'
+import { BrowserWindow, IpcMainEvent } from 'electron'
 
 export const windowBasicAction = {
   channel: CHANNELS.WINDOW_ACTION,
   handle: (event: IpcMainEvent, action: WindowAction) => {
-    const window = BrowserWindow.fromWebContents(event.sender);
+    const window = BrowserWindow.fromWebContents(event.sender)
 
     switch (action) {
       case WindowAction.Close:
-        window?.close();
-        break;
+        window?.close()
+        break
       case WindowAction.Maximize:
-        if (window?.isMaximized()) window.unmaximize();
-        else window?.maximize();
-        break;
+        if (window?.isMaximized()) window.unmaximize()
+        else window?.maximize()
+        break
       case WindowAction.Minimize:
-        window?.minimize();
-        break;
+        window?.minimize()
+        break
+      case WindowAction.AlwaysOnTop:
+        window?.setAlwaysOnTop(!window?.isAlwaysOnTop())
+        break
     }
-  },
-};
+  }
+}

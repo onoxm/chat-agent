@@ -1,1 +1,1 @@
-export * from "./useInitial";
+export * from './useInitial'

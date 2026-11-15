@@ -1,5 +1,6 @@
 export enum WindowAction {
-  Minimize = "minimize",
-  Maximize = "maximize",
-  Close = "close",
+  AlwaysOnTop = 'alwaysOnTop',
+  Minimize = 'minimize',
+  Maximize = 'maximize',
+  Close = 'close'
 }

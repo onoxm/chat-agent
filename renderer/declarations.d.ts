@@ -1,18 +1,18 @@
 /// <reference types="@electron-forge/plugin-vite/forge-vite-env" />
-import { type AgentOptions, WindowAction } from "@types";
+import { type AgentOptions, WindowAction } from '@types'
 
 export interface IElectronAPI {
-  windowAction: (action: WindowAction) => void;
+  windowAction: (action: WindowAction) => void
   chatWithAgent: (
     options: AgentOptions,
     onChunk: (content: string) => void,
     onDone?: () => void,
-    onError?: (message: string) => void,
-  ) => void;
+    onError?: (message: string) => void
+  ) => void
 }
 
 declare global {
   interface Window {
-    electronAPI: IElectronAPI;
+    electronAPI: IElectronAPI
   }
 }

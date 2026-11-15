@@ -12,10 +12,10 @@
  * https://electronjs.org/docs/tutorial/security
  */
 
-import App from "@/App";
-import "@/i18n";
-import "@/index.css";
-import { createRoot } from "react-dom/client";
-import "virtual:uno.css";
+import App from '@/App'
+import '@/i18n'
+import '@/index.css'
+import { createRoot } from 'react-dom/client'
+import 'virtual:uno.css'
 
-createRoot(document.getElementById("app")!).render(<App />);
+createRoot(document.getElementById('app')!).render(<App />)

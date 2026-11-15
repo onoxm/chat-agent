@@ -1,7 +1,7 @@
 {
   "translation": {
-   "placeholder": "Chat with agent",
-   "send": "Send",
-   "generating": "Generating..."
+    "placeholder": "Chat with agent",
+    "send": "Send",
+    "generating": "Generating..."
   }
 }

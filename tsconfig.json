@@ -15,7 +15,6 @@
       "@main/*": ["./main/*"],
       "@types": ["./types"],
       "@types/*": ["./types/*"],
-      "@common": ["./common"],
       "@locales/*": ["./locales/*"],
       "@/*": ["./renderer/*"]
     }

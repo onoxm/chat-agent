@@ -1,1 +1,1 @@
-export * from "./resolvePath";
+export * from './resolvePath'
