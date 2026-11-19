@@ -10,8 +10,8 @@ import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 const apiKey = 'electronAPI'
 
 const api = {
-  windowAction: (action: WindowAction) =>
-    ipcRenderer.send(CHANNELS.WINDOW_ACTION, action),
+  windowAction: (action: WindowAction, state?: boolean) =>
+    ipcRenderer.send(CHANNELS.WINDOW_ACTION, action, state),
   chatWithAgent: (
     options: AgentOptions,
     onChunk: (content: string) => void,

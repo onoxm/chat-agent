@@ -3,7 +3,7 @@ import { BrowserWindow, IpcMainEvent } from 'electron'
 
 export const windowBasicAction = {
   channel: CHANNELS.WINDOW_ACTION,
-  handle: (event: IpcMainEvent, action: WindowAction) => {
+  handle: (event: IpcMainEvent, action: WindowAction, state?: boolean) => {
     const window = BrowserWindow.fromWebContents(event.sender)
 
     switch (action) {
@@ -18,7 +18,7 @@ export const windowBasicAction = {
         window?.minimize()
         break
       case WindowAction.AlwaysOnTop:
-        window?.setAlwaysOnTop(!window?.isAlwaysOnTop())
+        if (state !== undefined) window?.setAlwaysOnTop(state)
         break
     }
   }

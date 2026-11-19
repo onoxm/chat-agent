@@ -10,7 +10,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses'
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    extraResource: ['public']
+    extraResource: [`${import.meta.dirname}/public`]
   },
   rebuildConfig: {},
   makers: [

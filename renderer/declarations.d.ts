@@ -2,7 +2,7 @@
 import { type AgentOptions, WindowAction } from '@types'
 
 export interface IElectronAPI {
-  windowAction: (action: WindowAction) => void
+  windowAction: (action: WindowAction, state?: boolean) => void
   chatWithAgent: (
     options: AgentOptions,
     onChunk: (content: string) => void,

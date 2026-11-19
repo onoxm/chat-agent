@@ -13,6 +13,6 @@ export const useInitial = () => {
 
   useEffect(() => {
     if (alwaysOnTop !== undefined)
-      window.electronAPI.windowAction(WindowAction.AlwaysOnTop)
-  }, [])
+      window.electronAPI.windowAction(WindowAction.AlwaysOnTop, alwaysOnTop)
+  }, [alwaysOnTop])
 }
