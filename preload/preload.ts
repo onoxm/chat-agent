@@ -1,17 +1,33 @@
 // preload.js
 import {
   CHANNELS,
+  CommunicationPayload,
+  CommunicationType,
   WindowAction,
   type AgentOptions,
-  type ChatStreamPayload
+  type ChatStreamPayload,
+  type WindowName
 } from '@types'
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 
-const apiKey = 'electronAPI'
+const apiKey = 'api'
 
 const api = {
   windowAction: (action: WindowAction, state?: boolean) =>
     ipcRenderer.send(CHANNELS.WINDOW_ACTION, action, state),
+  createWindow: (windowName: WindowName) =>
+    ipcRenderer.send(CHANNELS.CREATE_WINDOW, windowName),
+
+  sendState: (
+    targetWindow: WindowName,
+    type: CommunicationType,
+    state: string
+  ) => ipcRenderer.send(CHANNELS.SEND_WINDOW_STATE, targetWindow, type, state),
+  onState: (
+    channel: (typeof CHANNELS)[keyof typeof CHANNELS],
+    callback: (payload: CommunicationPayload) => void
+  ) => ipcRenderer.on(channel, (_, payload) => callback(payload)),
+
   chatWithAgent: (
     options: AgentOptions,
     onChunk: (content: string) => void,

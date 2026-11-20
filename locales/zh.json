@@ -2,6 +2,7 @@
   "translation": {
     "placeholder": "请输入内容",
     "send": "发送",
-    "generating": "生成中..."
+    "generating": "生成中...",
+    "settings": "设置"
   }
 }

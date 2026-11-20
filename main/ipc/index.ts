@@ -1,6 +1,8 @@
 import { type IpcMainEvent, type IpcMainInvokeEvent } from 'electron'
 import { chatWithAgent } from '../agnet'
 import { windowBasicAction } from './windowBasicAction'
+import { createWindow } from './createWindow'
+import { syncWindowState } from './syncWindowState'
 
 interface IpcMainAction {
   on: {
@@ -14,7 +16,7 @@ interface IpcMainAction {
 }
 
 export const ipcMainAction: IpcMainAction = {
-  on: [chatWithAgent, windowBasicAction],
+  on: [chatWithAgent, windowBasicAction, createWindow, syncWindowState],
   handle: [
     {
       channel: 'abc',

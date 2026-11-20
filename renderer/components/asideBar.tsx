@@ -1,13 +1,17 @@
 import { useStore } from '@/store'
+import { GearIcon } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 
 export const AsideBar = () => {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { asideShow, asideWidth } = useStore(['asideShow', 'asideWidth'])
 
   return (
     <aside
-      className="h-full border-r border-gray-300 transition-w duration-300 overflow-hidden"
+      className={[
+        'h-full border-r border-gray-300 transition-w duration-300 overflow-hidden',
+        asideShow ? 'p-2' : ''
+      ].join(' ')}
       style={{ width: asideShow ? asideWidth : 0 }}
     >
       <button
@@ -19,6 +23,14 @@ export const AsideBar = () => {
         }}
       >
         {i18n.language === 'en' ? 'en' : '中文'}
+      </button>
+
+      <button
+        className="w-full p-2 flex items-center gap-2 cursor-pointer rounded-sm hover:bg-gray-100"
+        onClick={() => window.api.createWindow('settings')}
+      >
+        <GearIcon size={24} />
+        {t('settings')}
       </button>
     </aside>
   )

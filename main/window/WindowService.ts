@@ -1,85 +1,85 @@
-import { WindowNames } from "@types";
-import { BrowserWindow, BrowserWindowConstructorOptions } from "electron";
-import path from "node:path";
+import { WindowName } from '@types'
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
+import path from 'node:path'
 
 type WindowServiceOptions = BrowserWindowConstructorOptions & {
-  windowName?: WindowNames;
-};
+  windowName?: WindowName
+}
 
 const basicWindowOptions: WindowServiceOptions = {
-  title: "Chat Agent",
+  title: 'Chat Agent',
   width: 800,
   height: 600,
   show: false,
   minWidth: 800,
   minHeight: 600,
-  titleBarStyle: "hidden",
+  titleBarStyle: 'hidden',
   webPreferences: {
-    preload: path.join(__dirname, "preload.cjs"),
-  },
-};
+    preload: path.join(__dirname, 'preload.cjs')
+  }
+}
 
 export class WindowService {
-  private static instance: WindowService;
-  #windows: Map<WindowNames, BrowserWindow>;
+  private static instance: WindowService
+  #windows: Map<WindowName, BrowserWindow>
   private constructor() {
-    this.#windows = new Map();
+    this.#windows = new Map()
   }
 
   public create(options?: WindowServiceOptions) {
-    const { windowName = "main", ...rest } = options || {};
+    const { windowName = 'main', ...rest } = options || {}
 
-    if (this.hasWindow(windowName)) return this.getWindow(windowName)!;
+    if (this.hasWindow(windowName)) return this.getWindow(windowName)!
 
     const win = new BrowserWindow({
       ...basicWindowOptions,
-      ...rest,
-    });
+      ...rest
+    })
 
-    this.#loadWindow(win, windowName);
+    this.#loadWindow(win, windowName)
 
-    if (process.env.NODE_ENV === "development") {
-      win.webContents.openDevTools();
+    if (process.env.NODE_ENV === 'development') {
+      win.webContents.openDevTools()
     }
 
-    this.#windows.set(windowName, win);
+    this.#windows.set(windowName, win)
 
-    win.on("close", () => {
-      this.#windows.delete(windowName);
-    });
+    win.on('close', () => {
+      this.#windows.delete(windowName)
+    })
 
-    win.once("ready-to-show", () => {
-      win.show();
-    });
+    win.once('ready-to-show', () => {
+      win.show()
+    })
 
-    return win;
+    return win
   }
 
-  #loadWindow(window: BrowserWindow, hash: WindowNames = "main") {
+  #loadWindow(window: BrowserWindow, hash: WindowName = 'main') {
     if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-      window.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}#${hash}`);
+      window.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}#${hash}`)
     } else {
       window.loadFile(
         path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
-        { hash },
-      );
+        { hash }
+      )
     }
   }
 
   public static getInstance(): WindowService {
     if (!WindowService.instance) {
-      WindowService.instance = new WindowService();
+      WindowService.instance = new WindowService()
     }
-    return WindowService.instance;
+    return WindowService.instance
   }
 
-  public hasWindow(windowName: WindowNames = "main") {
-    return this.#windows.has(windowName);
+  public hasWindow(windowName: WindowName = 'main') {
+    return this.#windows.has(windowName)
   }
 
-  public getWindow(windowName: WindowNames = "main") {
-    return this.#windows.get(windowName);
+  public getWindow(windowName: WindowName = 'main') {
+    return this.#windows.get(windowName)
   }
 }
 
-export const windowManager = WindowService.getInstance();
+export const windowManager = WindowService.getInstance()

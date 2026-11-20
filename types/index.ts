@@ -1,4 +1,5 @@
 export * from './agent'
 export * from './channel'
+export * from './communication'
 export * from './window-action'
-export * from './window-names'
+export * from './window-name'

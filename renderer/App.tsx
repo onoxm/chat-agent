@@ -1,15 +1,15 @@
-import { WindowNames } from "@types";
-import { lazy } from "react";
-import { useInitial } from "./hooks";
+import { WindowName } from '@types'
+import { lazy } from 'react'
+import { useInitial } from './hooks'
 
-const hash = window.location.hash.slice(1) as WindowNames;
+const hash = window.location.hash.slice(1) as WindowName
 
-const Main = lazy(() => import("./pages/index"));
+const Main = lazy(() => import('./pages/index'))
 
-const Settings = lazy(() => import("./pages/settings"));
+const Settings = lazy(() => import('./pages/settings'))
 
 export default () => {
-  useInitial();
+  useInitial()
 
-  return hash === "settings" ? <Settings /> : <Main />;
-};
+  return hash === 'settings' ? <Settings /> : <Main />
+}
