@@ -58,6 +58,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "electron-squirrel-startup": "^1.0.1",
     "langchain": "^1.5.16",
+    "ono-react-element": "^0.6.9",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "zod": "^4.6.7"

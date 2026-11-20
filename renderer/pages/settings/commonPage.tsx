@@ -1,14 +1,11 @@
-import { HeadBar } from '@/components'
 import { useStore } from '@/store'
 import { useTranslation } from 'react-i18next'
 
-export default () => {
+export const CommonPage = () => {
   const { i18n } = useTranslation()
 
   return (
-    <div className="w-screen h-screen flex flex-col">
-      <HeadBar hiddenLeft hiddenAlwaysTop />
-      <div>Settings</div>
+    <div>
       <button
         className="w-full cursor-pointer"
         onClick={() => {

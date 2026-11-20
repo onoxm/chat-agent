@@ -1,5 +1,6 @@
 export * from './agent'
 export * from './channel'
 export * from './communication'
+export * from './model'
 export * from './window-action'
 export * from './window-name'

@@ -1,3 +1,4 @@
+import type { ModelInfo } from '@types'
 import { defineGlobalState, persistMiddleware } from '@onoxm/react-tools'
 
 const initialState = {
@@ -5,7 +6,8 @@ const initialState = {
   asideShow: true,
   asideWidth: 240,
   asideWidthScope: [200, 300],
-  alwaysOnTop: false
+  alwaysOnTop: false,
+  modelList: [] as ModelInfo[]
 }
 
 export const useStore = defineGlobalState(initialState, [
@@ -16,7 +18,8 @@ export const useStore = defineGlobalState(initialState, [
       'asideShow',
       'asideWidth',
       'asideWidthScope',
-      'alwaysOnTop'
+      'alwaysOnTop',
+      'modelList'
     ]
   })
 ])

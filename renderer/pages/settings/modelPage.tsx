@@ -1,0 +1,63 @@
+import { ModelCard } from '@/components'
+import { useStore } from '@/store'
+import { PlusIcon } from '@phosphor-icons/react'
+import { ModelInfo } from '@types'
+import { toast } from 'ono-react-element'
+
+export const ModelPage = () => {
+  const modelList = useStore('modelList')
+
+  const updateModel = (modelInfo: Partial<ModelInfo>, index: number) => {
+    useStore.setState(({ modelList }) => {
+      const newModelList = [...modelList]
+      newModelList[index] = { ...newModelList[index], ...modelInfo }
+      return { modelList: newModelList }
+    })
+  }
+
+  const deleteModel = (index: number) => {
+    useStore.setState(({ modelList }) => ({
+      modelList: modelList.filter((_, i) => i !== index)
+    }))
+  }
+
+  return (
+    <div className="w-full">
+      <div className="w-full flex justify-between">
+        <span>模型设置</span>
+
+        <div className="flex items-center gap-3">
+          <button
+            className="flex items-center gap-1 cursor-pointer px-2 py-1 bg-blue-500 text-white rounded-lg"
+            onClick={() => {
+              const lastModel = modelList[modelList.length - 1]
+              if (
+                lastModel.apiKey === '' ||
+                lastModel.url === '' ||
+                lastModel.label === ''
+              )
+                return toast.warning('请填写好模型的完整信息')
+              useStore.setState(({ modelList }) => ({
+                modelList: [...modelList, { label: '', url: '', apiKey: '' }]
+              }))
+            }}
+          >
+            <PlusIcon size={16} />
+            新增
+          </button>
+        </div>
+      </div>
+
+      {modelList.map(({ label, url, apiKey }, i) => (
+        <ModelCard
+          key={i}
+          label={label}
+          url={url}
+          apiKey={apiKey}
+          updateModel={model => updateModel(model, i)}
+          deleteModel={() => deleteModel(i)}
+        />
+      ))}
+    </div>
+  )
+}
