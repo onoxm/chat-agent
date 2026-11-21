@@ -6,5 +6,8 @@ export const CHANNELS = {
   CREATE_WINDOW: 'create-window',
 
   SEND_WINDOW_STATE: 'send-window-state',
-  ON_WINDOW_STATE: 'on-window-state'
+  ON_WINDOW_STATE: 'on-window-state',
+
+  ENCRYPT_STR: 'encrypt-str',
+  DECRYPT_STR: 'decrypt-str'
 }

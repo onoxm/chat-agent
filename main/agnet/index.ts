@@ -4,14 +4,14 @@ import {
   SystemMessagePromptTemplate
 } from '@langchain/core/prompts'
 import { StateGraph } from '@langchain/langgraph'
-import type { IpcMainEvent } from 'electron'
-import { AIMessage, BaseMessage, HumanMessage } from 'langchain'
-import { z } from 'zod/v4'
 import {
   CHANNELS,
   type ChatRequestOptions,
   type ChatStreamPayload
 } from '@types'
+import type { IpcMainEvent } from 'electron'
+import { AIMessage, BaseMessage, HumanMessage } from 'langchain'
+import { z } from 'zod/v4'
 import { createModel } from './agent'
 
 const schema = z.object({
@@ -25,14 +25,12 @@ export const chatWithAgent = {
   channel: CHANNELS.CHAT_WITH_AGENT,
   handle: async (
     event: IpcMainEvent,
-    { model: modelName, messages, requestId }: ChatRequestOptions
+    { messages, requestId, ...rest }: ChatRequestOptions
   ) => {
     const send = (payload: ChatStreamPayload) =>
       event.sender.send(CHANNELS.CHAT_WITH_AGENT_STREAM, payload)
 
     try {
-      const model = createModel({ modelName })
-
       const pt = ChatPromptTemplate.fromMessages([
         SystemMessagePromptTemplate.fromTemplate(
           '你是一个中文健谈的AI助手，请结合上下文尽可能详细地使用中文回答用户问题。'
@@ -40,7 +38,7 @@ export const chatWithAgent = {
         new MessagesPlaceholder('messages')
       ])
 
-      const chain = pt.pipe(model)
+      const chain = pt.pipe(createModel(rest))
 
       async function llmNode(state: TState) {
         const stream = await chain.stream({

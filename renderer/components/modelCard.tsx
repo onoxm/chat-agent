@@ -1,7 +1,7 @@
 import { EyeClosedIcon, EyeIcon, XCircleIcon } from '@phosphor-icons/react'
 import type { ModelInfo } from '@types'
 import { chainClassNames } from 'ono-react-element'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface ModelCardProps {
   label: string
@@ -20,6 +20,8 @@ export const ModelCard = ({
 }: ModelCardProps) => {
   const [showApiKey, setShowApiKey] = useState(false)
   const [focusApiKey, setApiKeyFocus] = useState(false)
+
+  const [innerApiKey, setInnerApiKey] = useState('')
 
   const cardInfo = [
     {
@@ -40,16 +42,29 @@ export const ModelCard = ({
     },
     {
       label: 'ApiKey',
-      value: apiKey,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+      value: innerApiKey,
+      onChange: async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInnerApiKey(e.target.value)
+        const encryptStr = await window.api.encryptStr(e.target.value)
         updateModel({
-          apiKey: e.target.value
+          apiKey: encryptStr
         })
+      }
     }
   ]
 
+  const decryptStr = async (str: string) => {
+    const decryptStr = await window.api.decryptStr(str)
+    setInnerApiKey(decryptStr)
+  }
+
+  useEffect(() => {
+    if (apiKey === '') return
+    decryptStr(apiKey)
+  }, [])
+
   return (
-    <div className="flex flex-col gap-2 border-2 border-gray-500 p-3 rounded-lg">
+    <div className="flex flex-col gap-3 border-2 border-gray-500 p-3 rounded-lg">
       <div className="flex justify-end">
         <button className="text-red-500" onClick={deleteModel}>
           <XCircleIcon size={28} />
@@ -70,10 +85,19 @@ export const ModelCard = ({
               <input
                 type={showApiKey ? 'text' : 'password'}
                 className="flex-1 outline-none"
+                spellCheck={false}
                 value={value}
                 onChange={onChange}
-                onFocus={() => setApiKeyFocus(true)}
+                onFocus={e => {
+                  setApiKeyFocus(true)
+                  setTimeout(() => e.target.select(), 0)
+                }}
                 onBlur={() => setApiKeyFocus(false)}
+                onPaste={e => {
+                  e.preventDefault()
+                  const text = e.clipboardData.getData('text').trim()
+                  onChange({ target: { value: text } } as any)
+                }}
               />
 
               <button onClick={() => setShowApiKey(!showApiKey)}>

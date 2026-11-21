@@ -1,19 +1,27 @@
 import { AsideBar, HeadBar } from '@/components'
-import { Message, Model, modelList } from '@types'
+import { useStore } from '@/store'
+import { Message } from '@types'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+const ollamaModelList = [
+  { label: 'deepseek-r1', url: '', apiKey: '' },
+  { label: 'llama3', url: '', apiKey: '' },
+  { label: 'qwen3.8', url: '', apiKey: '' }
+]
+
 export default () => {
   const { t } = useTranslation()
+  const { defaultModel, modelList } = useStore(['defaultModel', 'modelList'])
 
+  const [model, setModel] = useState(defaultModel)
   const [value, setValue] = useState('')
-  const [model, setModel] = useState<Model>('deepseek-r1')
   const [messages, setMessages] = useState<Message[]>([])
   const [isStreaming, setIsStreaming] = useState(false)
 
   const messagesRef = useRef<HTMLDivElement>(null)
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!value || isStreaming) return
 
     const currentMessages: Message[] = [
@@ -25,9 +33,17 @@ export default () => {
     setMessages([...currentMessages, { role: 'assistant', content: '' }])
     setIsStreaming(true)
 
+    const currentModel = [...ollamaModelList, ...modelList].find(
+      item => item.label === defaultModel
+    )!
+
+    const apiKey = await window.api.decryptStr(currentModel.apiKey)
+
     window.api.chatWithAgent(
       {
         model,
+        url: currentModel.url,
+        apiKey,
         messages: currentMessages
       },
       content => {
@@ -96,11 +112,11 @@ export default () => {
               className="ml-4 cursor-pointer px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 border border-gray-300"
               disabled={isStreaming}
               value={model}
-              onChange={e => setModel(e.target.value as Model)}
+              onChange={e => setModel(e.target.value)}
             >
-              {modelList.map(m => (
-                <option key={m} value={m}>
-                  {m}
+              {[...ollamaModelList, ...modelList].map(({ label }) => (
+                <option key={label} value={label}>
+                  {label}
                 </option>
               ))}
             </select>

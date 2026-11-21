@@ -1,6 +1,8 @@
-export type CommunicationType = 'language'
+import { InitialStateType } from '@/store'
+
+export type CommunicationType = keyof InitialStateType
 
 export type CommunicationPayload = {
-  type: 'language'
+  type: CommunicationType
   data: any
 }

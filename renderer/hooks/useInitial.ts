@@ -8,12 +8,8 @@ export const useInitial = () => {
   const { language, alwaysOnTop } = useStore(['language', 'alwaysOnTop'])
 
   useEffect(() => {
-    window.api.onState(CHANNELS.ON_WINDOW_STATE, payload => {
-      switch (payload.type) {
-        case 'language':
-          useStore.setState({ language: payload.data })
-          break
-      }
+    window.api.onState(CHANNELS.ON_WINDOW_STATE, ({ type, data }) => {
+      useStore.setState({ [type]: data })
     })
   }, [])
 

@@ -8,17 +8,26 @@ export const ModelPage = () => {
   const modelList = useStore('modelList')
 
   const updateModel = (modelInfo: Partial<ModelInfo>, index: number) => {
-    useStore.setState(({ modelList }) => {
-      const newModelList = [...modelList]
-      newModelList[index] = { ...newModelList[index], ...modelInfo }
-      return { modelList: newModelList }
-    })
+    const newModelList = [...modelList]
+    newModelList[index] = { ...newModelList[index], ...modelInfo }
+
+    if (modelList.length === 0)
+      window.api.sendState('main', 'defaultModel', newModelList[index].label)
+
+    useStore.setState({ modelList: newModelList })
+
+    window.api.sendState('main', 'modelList', newModelList)
   }
 
   const deleteModel = (index: number) => {
-    useStore.setState(({ modelList }) => ({
-      modelList: modelList.filter((_, i) => i !== index)
-    }))
+    const newModelList = modelList.filter((_, i) => i !== index)
+
+    useStore.setState({ modelList: newModelList })
+
+    window.api.sendState('main', 'modelList', newModelList)
+
+    if (newModelList.length === 0)
+      window.api.sendState('main', 'defaultModel', '')
   }
 
   return (

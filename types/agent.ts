@@ -1,12 +1,10 @@
 export type Role = 'user' | 'assistant'
 export type Message = { role: Role; content: string }
 
-export const modelList = ['deepseek-r1', 'llama3', 'qwen3.8'] as const
-
-export type Model = (typeof modelList)[number]
-
 export interface AgentOptions {
-  model: Model
+  model: string
+  url: string
+  apiKey: string
   messages: Message[]
 }
 

@@ -2,10 +2,10 @@
 import {
   type AgentOptions,
   CHANNELS,
-  WindowAction,
-  type WindowName,
+  type CommunicationPayload,
   type CommunicationType,
-  type CommunicationPayload
+  WindowAction,
+  type WindowName
 } from '@types'
 
 export interface IElectronAPI {
@@ -15,12 +15,15 @@ export interface IElectronAPI {
   sendState: (
     targetWindow: WindowName,
     type: CommunicationType,
-    state: string
+    state: any
   ) => void
   onState: (
     channel: (typeof CHANNELS)[keyof typeof CHANNELS],
     callback: (payload: CommunicationPayload) => void
   ) => void
+
+  encryptStr: (str: string) => Promise<string>
+  decryptStr: (str: string) => Promise<string>
 
   chatWithAgent: (
     options: AgentOptions,
