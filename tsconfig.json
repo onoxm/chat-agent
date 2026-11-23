@@ -16,6 +16,8 @@
       "@types": ["./types"],
       "@types/*": ["./types/*"],
       "@locales/*": ["./locales/*"],
+      "@common": ["./common"],
+      "@utils": ["./utils"],
       "@/*": ["./renderer/*"]
     }
   },
@@ -26,6 +28,9 @@
     "renderer/**/*",
     "types/**/*",
     "*.ts",
-    "*.mts"
+    "*.mts",
+    "utils/index.ts",
+    "utils/resolvePath.ts",
+    "utils/stringEncrypt.ts"
   ]
 }

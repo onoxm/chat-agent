@@ -4,6 +4,8 @@ import { createWindow } from './createWindow'
 import { decryptStr, encryptStr } from './stringHandler'
 import { syncWindowState } from './syncWindowState'
 import { windowBasicAction } from './windowBasicAction'
+import { exportConfig } from './exportConfig'
+import { importConfig } from './importConfig'
 
 interface IpcMainAction {
   on: {
@@ -18,5 +20,5 @@ interface IpcMainAction {
 
 export const ipcMainAction: IpcMainAction = {
   on: [chatWithAgent, windowBasicAction, createWindow, syncWindowState],
-  handle: [encryptStr, decryptStr]
+  handle: [encryptStr, decryptStr, exportConfig, importConfig]
 }

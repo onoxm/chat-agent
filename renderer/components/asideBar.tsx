@@ -9,8 +9,8 @@ export const AsideBar = () => {
   return (
     <aside
       className={[
-        'h-full border-r border-gray-300 transition-w duration-300 overflow-hidden',
-        asideShow ? 'p-2' : ''
+        'h-full border-r border-gray-300 transition-all duration-300 overflow-hidden',
+        asideShow ? 'p-2' : 'py-2'
       ].join(' ')}
       style={{ width: asideShow ? asideWidth : 0 }}
     >
@@ -26,8 +26,9 @@ export const AsideBar = () => {
       </button>
 
       <button
-        className="w-full p-2 flex items-center gap-2 cursor-pointer rounded-sm hover:bg-gray-100"
+        className="p-2 flex items-center gap-2 cursor-pointer rounded-sm hover:bg-gray-100"
         onClick={() => window.api.createWindow('settings')}
+        style={{ width: asideWidth - 16 }}
       >
         <GearIcon size={24} />
         {t('settings')}

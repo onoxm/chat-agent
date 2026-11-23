@@ -34,7 +34,7 @@ export default () => {
     setIsStreaming(true)
 
     const currentModel = [...ollamaModelList, ...modelList].find(
-      item => item.label === defaultModel
+      item => item.label === model
     )!
 
     const apiKey = await window.api.decryptStr(currentModel.apiKey)

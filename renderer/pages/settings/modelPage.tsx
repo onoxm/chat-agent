@@ -1,6 +1,6 @@
 import { ModelCard } from '@/components'
 import { useStore } from '@/store'
-import { PlusIcon } from '@phosphor-icons/react'
+import { DownloadSimpleIcon, ExportIcon, PlusIcon } from '@phosphor-icons/react'
 import { ModelInfo } from '@types'
 import { toast } from 'ono-react-element'
 
@@ -36,6 +36,39 @@ export const ModelPage = () => {
         <span>模型设置</span>
 
         <div className="flex items-center gap-3">
+          <button
+            className="flex items-center gap-1 cursor-pointer px-2 py-1 bg-blue-500 text-white rounded-lg"
+            onClick={async () => {
+              const modelList =
+                (await window.api.importConfig()) as unknown as ModelInfo[]
+
+              if (modelList) {
+                useStore.setState({ modelList })
+
+                toast.success('导入成功')
+              }
+            }}
+          >
+            <DownloadSimpleIcon size={16} />
+            导入配置
+          </button>
+
+          <button
+            className="flex items-center gap-1 cursor-pointer px-2 py-1 bg-blue-500 text-white rounded-lg"
+            onClick={async () => {
+              await window.api.exportConfig(
+                'E:\\desktop',
+                modelList,
+                'models.json'
+              )
+
+              toast.success('导出成功')
+            }}
+          >
+            <ExportIcon size={16} />
+            导出配置
+          </button>
+
           <button
             className="flex items-center gap-1 cursor-pointer px-2 py-1 bg-blue-500 text-white rounded-lg"
             onClick={() => {

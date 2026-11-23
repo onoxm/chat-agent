@@ -18,8 +18,11 @@ const api = {
   createWindow: (windowName: WindowName) =>
     ipcRenderer.send(CHANNELS.CREATE_WINDOW, windowName),
 
-  sendState: (targetWindow: WindowName, type: CommunicationType, state: any) =>
-    ipcRenderer.send(CHANNELS.SEND_WINDOW_STATE, targetWindow, type, state),
+  sendState: (
+    targetWindow: WindowName | 'all',
+    type: CommunicationType,
+    state: any
+  ) => ipcRenderer.send(CHANNELS.SEND_WINDOW_STATE, targetWindow, type, state),
   onState: (
     channel: (typeof CHANNELS)[keyof typeof CHANNELS],
     callback: (payload: CommunicationPayload) => void
@@ -27,6 +30,10 @@ const api = {
 
   encryptStr: (str: string) => ipcRenderer.invoke(CHANNELS.ENCRYPT_STR, str),
   decryptStr: (str: string) => ipcRenderer.invoke(CHANNELS.DECRYPT_STR, str),
+
+  importConfig: () => ipcRenderer.invoke(CHANNELS.IMPORT_CONFIG),
+  exportConfig: (path: string, config: any, filename: string) =>
+    ipcRenderer.invoke(CHANNELS.EXPORT_CONFIG, path, config, filename),
 
   chatWithAgent: (
     options: AgentOptions,

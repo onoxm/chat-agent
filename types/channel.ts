@@ -9,5 +9,8 @@ export const CHANNELS = {
   ON_WINDOW_STATE: 'on-window-state',
 
   ENCRYPT_STR: 'encrypt-str',
-  DECRYPT_STR: 'decrypt-str'
+  DECRYPT_STR: 'decrypt-str',
+
+  IMPORT_CONFIG: 'import-config',
+  EXPORT_CONFIG: 'export-config'
 }

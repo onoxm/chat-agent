@@ -80,6 +80,10 @@ export class WindowService {
   public getWindow(windowName: WindowName = 'main') {
     return this.#windows.get(windowName)
   }
+
+  public getAllWindows() {
+    return Array.from(this.#windows.values())
+  }
 }
 
 export const windowManager = WindowService.getInstance()

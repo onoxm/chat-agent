@@ -13,7 +13,7 @@ export interface IElectronAPI {
   createWindow: (windowName: WindowName) => void
 
   sendState: (
-    targetWindow: WindowName,
+    targetWindow: WindowName | 'all',
     type: CommunicationType,
     state: any
   ) => void
@@ -24,6 +24,9 @@ export interface IElectronAPI {
 
   encryptStr: (str: string) => Promise<string>
   decryptStr: (str: string) => Promise<string>
+
+  importConfig: () => Promise<Record<string, unknown> | null>
+  exportConfig: (path: string, config: any, filename: string) => Promise<string>
 
   chatWithAgent: (
     options: AgentOptions,

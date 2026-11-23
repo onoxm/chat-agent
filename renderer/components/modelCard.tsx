@@ -1,6 +1,7 @@
-import { EyeClosedIcon, EyeIcon, XCircleIcon } from '@phosphor-icons/react'
+import { NEW_FORMAT_PREFIX } from '@common'
+import { EyeClosedIcon, EyeIcon, TrashIcon } from '@phosphor-icons/react'
 import type { ModelInfo } from '@types'
-import { chainClassNames } from 'ono-react-element'
+import { chainClassNames, toast } from 'ono-react-element'
 import { useEffect, useState } from 'react'
 
 interface ModelCardProps {
@@ -54,8 +55,19 @@ export const ModelCard = ({
   ]
 
   const decryptStr = async (str: string) => {
-    const decryptStr = await window.api.decryptStr(str)
-    setInnerApiKey(decryptStr)
+    try {
+      const plain = await window.api.decryptStr(str)
+      setInnerApiKey(plain)
+
+      // 旧版 safeStorage 密文无法用新方案解密：清空存储并提示重填
+      if (!str.startsWith(NEW_FORMAT_PREFIX)) {
+        toast.warning('旧版 ApiKey 已失效，请重新填写')
+        updateModel({ apiKey: '' })
+      }
+    } catch (e) {
+      console.error(e)
+      toast.warning('ApiKey 解密失败，请重新填写')
+    }
   }
 
   useEffect(() => {
@@ -66,8 +78,11 @@ export const ModelCard = ({
   return (
     <div className="flex flex-col gap-3 border-2 border-gray-500 p-3 rounded-lg">
       <div className="flex justify-end">
-        <button className="text-red-500" onClick={deleteModel}>
-          <XCircleIcon size={28} />
+        <button
+          className="text-red-500 hover:bg-gray-200 p-1 rounded-md"
+          onClick={deleteModel}
+        >
+          <TrashIcon size={28} />
         </button>
       </div>
       {cardInfo.map(({ label, value, onChange }) => (
