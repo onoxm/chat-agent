@@ -9,9 +9,11 @@ import {
   SunIcon
 } from '@phosphor-icons/react'
 import type { ThemeMode } from 'ono-react-element'
+import { useTranslation } from 'react-i18next'
 
 interface ActionItem {
   title: string
+  label: string
   Icon: React.FC<{ size: number }>
   onClick: () => void
 }
@@ -22,12 +24,14 @@ interface NavBarProps {
 }
 
 export const NavBar = ({ toggleChatBar, navBarWidth }: NavBarProps) => {
+  const { t } = useTranslation()
   const theme = useStore('theme')
 
   const navList: ActionItem[][] = [
     [
       {
         title: '聊天',
+        label: t('navBar.chat'),
         Icon: ({ size }) => <ChatTextIcon size={size} />,
         onClick: toggleChatBar
       }
@@ -35,6 +39,13 @@ export const NavBar = ({ toggleChatBar, navBarWidth }: NavBarProps) => {
     [
       {
         title: '主题切换',
+        label: t(
+          theme === 'dark'
+            ? 'navBar.darkMode'
+            : theme === 'light'
+              ? 'navBar.lightMode'
+              : 'navBar.systemMode'
+        ),
         Icon: ({ size }) =>
           theme === 'dark' ? (
             <MoonIcon size={size} />
@@ -51,6 +62,7 @@ export const NavBar = ({ toggleChatBar, navBarWidth }: NavBarProps) => {
       },
       {
         title: '设置',
+        label: t('navBar.settings'),
         Icon: ({ size }) => <GearIcon size={size} />,
         onClick: () => window.api.createWindow('settings')
       }

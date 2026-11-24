@@ -1,8 +1,21 @@
 {
-  "translation": {
+  "window": {
+    "alwaysOnTop": "Always on top",
+    "alwaysOnBottom": "Always on bottom",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
+  },
+  "homepage": {
     "placeholder": "Chat with agent",
     "send": "Send",
-    "generating": "Generating...",
+    "generating": "Generating..."
+  },
+  "navBar": {
+    "chat": "Chat",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "systemMode": "System Mode",
     "settings": "Settings"
   }
 }
