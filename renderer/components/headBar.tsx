@@ -1,75 +1,77 @@
 import { useStore } from '@/store'
+import { TITLE_BAR_ICON_SIZE } from '@common'
 import {
   ArrowsInSimpleIcon,
-  FrameCornersIcon,
+  ArrowsOutSimpleIcon,
+  MinusIcon,
   PushPinSimpleIcon,
   PushPinSimpleSlashIcon,
-  SidebarSimpleIcon,
   XIcon
 } from '@phosphor-icons/react'
 import { WindowAction } from '@types'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { JSX } from 'react/jsx-dev-runtime'
+import logo from '../../public/logo.png'
 
-const titleBarIconSize = 24
+const hash = window.location.hash.slice(1) as string
 
-interface HeadBarProps {
-  hiddenLeft?: boolean
-  hiddenAlwaysTop?: boolean
-}
-
-export const HeadBar = ({ hiddenLeft, hiddenAlwaysTop }: HeadBarProps) => {
+export const HeadBar = () => {
   const alwaysOnTop = useStore('alwaysOnTop')
+
+  const [isFullScreen, setFullScreen] = useState(false)
 
   const windowAction = window.api.windowAction
 
-  const windowBtnList = useMemo(() => {
-    const alwaysOnTopArr = hiddenAlwaysTop
-      ? []
-      : [
-          {
-            action: WindowAction.AlwaysOnTop,
-            icon: alwaysOnTop ? (
-              <PushPinSimpleIcon size={titleBarIconSize} />
-            ) : (
-              <PushPinSimpleSlashIcon size={titleBarIconSize} />
-            )
-          }
-        ]
+  const windowBtnList = useMemo<
+    { icon: JSX.Element; action: WindowAction; onClick?: () => void }[]
+  >(() => {
+    const alwaysOnTopArr =
+      hash === 'settings'
+        ? []
+        : [
+            {
+              action: WindowAction.AlwaysOnTop,
+              icon: alwaysOnTop ? (
+                <PushPinSimpleIcon size={TITLE_BAR_ICON_SIZE} />
+              ) : (
+                <PushPinSimpleSlashIcon size={TITLE_BAR_ICON_SIZE} />
+              )
+            }
+          ]
 
     return [
       ...alwaysOnTopArr,
       {
         action: WindowAction.Minimize,
-        icon: <ArrowsInSimpleIcon size={titleBarIconSize} color="green" />
+        icon: <MinusIcon size={TITLE_BAR_ICON_SIZE} color="green" />
       },
       {
         action: WindowAction.Maximize,
-        icon: <FrameCornersIcon size={titleBarIconSize} color="orange" />
+        icon: isFullScreen ? (
+          <ArrowsInSimpleIcon size={TITLE_BAR_ICON_SIZE} color="orange" />
+        ) : (
+          <ArrowsOutSimpleIcon size={TITLE_BAR_ICON_SIZE} color="orange" />
+        ),
+        onClick: async () => {
+          const bl = (await window.api.getCurrentWindowState(
+            'maximize'
+          )) as boolean
+          setFullScreen(bl)
+        }
       },
       {
         action: WindowAction.Close,
-        icon: <XIcon size={titleBarIconSize} color="red" />
+        icon: <XIcon size={TITLE_BAR_ICON_SIZE} color="red" />
       }
     ]
-  }, [hiddenAlwaysTop, alwaysOnTop])
+  }, [alwaysOnTop, isFullScreen])
 
   return (
-    <div className="w-full h-10 shrink-0 flex items-center justify-between gap-4 drag p-2 border-b border-gray-300">
-      {!hiddenLeft && (
-        <button
-          className="cursor-pointer no-drag"
-          onClick={() =>
-            useStore.setState(({ asideShow }) => ({
-              asideShow: !asideShow
-            }))
-          }
-        >
-          <SidebarSimpleIcon size={titleBarIconSize} />
-        </button>
-      )}
+    <div className="w-full shrink-0 flex items-center justify-between gap-4 drag p-2 border-b border-gray-300">
+      <img src={logo} className="size-6" />
 
       <div className="flex flex-1 gap-4 justify-end">
-        {windowBtnList.map(({ action, icon }) => (
+        {windowBtnList.map(({ action, icon, onClick }) => (
           <button
             key={action}
             className="cursor-pointer no-drag"
@@ -77,6 +79,7 @@ export const HeadBar = ({ hiddenLeft, hiddenAlwaysTop }: HeadBarProps) => {
               if (action === WindowAction.AlwaysOnTop)
                 useStore.setState({ alwaysOnTop: !alwaysOnTop })
               else windowAction(action)
+              onClick?.()
             }}
           >
             {icon}

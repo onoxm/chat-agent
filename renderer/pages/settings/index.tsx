@@ -20,7 +20,7 @@ export default () => {
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      <HeadBar hiddenLeft hiddenAlwaysTop />
+      <HeadBar />
       <SliderList
         list={tabList}
         className="flex items-center gap-4"

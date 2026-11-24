@@ -1,82 +1,89 @@
-import { AsideBar, HeadBar } from '@/components'
-import { useStore } from '@/store'
-import { Message } from '@types'
-import { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { AsideBar, HeadBar } from "@/components";
+import { useStore } from "@/store";
+import { Message } from "@types";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ollamaModelList = [
-  { label: 'deepseek-r1', url: '', apiKey: '' },
-  { label: 'llama3', url: '', apiKey: '' },
-  { label: 'qwen3.8', url: '', apiKey: '' }
-]
+  { label: "deepseek-r1", url: "", apiKey: "" },
+  { label: "llama3", url: "", apiKey: "" },
+  { label: "qwen3.8", url: "", apiKey: "" },
+];
 
 export default () => {
-  const { t } = useTranslation()
-  const { defaultModel, modelList } = useStore(['defaultModel', 'modelList'])
+  const { t } = useTranslation();
+  const { defaultModel, modelList, encryptionPassphrase } = useStore([
+    "defaultModel",
+    "modelList",
+    "encryptionPassphrase",
+  ]);
 
-  const [model, setModel] = useState(defaultModel)
-  const [value, setValue] = useState('')
-  const [messages, setMessages] = useState<Message[]>([])
-  const [isStreaming, setIsStreaming] = useState(false)
+  const [model, setModel] = useState(defaultModel);
+  const [value, setValue] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isStreaming, setIsStreaming] = useState(false);
 
-  const messagesRef = useRef<HTMLDivElement>(null)
+  const messagesRef = useRef<HTMLDivElement>(null);
 
   const handleSendMessage = async () => {
-    if (!value || isStreaming) return
+    if (!value || isStreaming) return;
 
     const currentMessages: Message[] = [
       ...messages,
-      { role: 'user', content: value }
-    ]
-    setValue('')
+      { role: "user", content: value },
+    ];
+    setValue("");
     // 先追加一条空的 assistant 消息，流式分片都往这条里拼
-    setMessages([...currentMessages, { role: 'assistant', content: '' }])
-    setIsStreaming(true)
+    setMessages([...currentMessages, { role: "assistant", content: "" }]);
+    setIsStreaming(true);
 
     const currentModel = [...ollamaModelList, ...modelList].find(
-      item => item.label === model
-    )!
+      (item) => item.label === model,
+    )!;
 
-    const apiKey = await window.api.decryptStr(currentModel.apiKey)
+    const apiKey = await window.api.decryptStr(
+      encryptionPassphrase,
+      currentModel.apiKey,
+    );
 
     window.api.chatWithAgent(
       {
         model,
         url: currentModel.url,
         apiKey,
-        messages: currentMessages
+        messages: currentMessages,
       },
-      content => {
-        setMessages(prev => {
-          const next = [...prev]
-          const last = next[next.length - 1]
+      (content) => {
+        setMessages((prev) => {
+          const next = [...prev];
+          const last = next[next.length - 1];
           next[next.length - 1] = {
             ...last,
-            content: last.content + content
-          }
-          return next
-        })
+            content: last.content + content,
+          };
+          return next;
+        });
       },
       () => setIsStreaming(false),
-      message => {
-        setMessages(prev => {
-          const next = [...prev]
-          const last = next[next.length - 1]
+      (message) => {
+        setMessages((prev) => {
+          const next = [...prev];
+          const last = next[next.length - 1];
           next[next.length - 1] = {
             ...last,
-            content: `${last.content}\n请求失败：${message}`
-          }
-          return next
-        })
-        setIsStreaming(false)
-      }
-    )
-  }
+            content: `${last.content}\n请求失败：${message}`,
+          };
+          return next;
+        });
+        setIsStreaming(false);
+      },
+    );
+  };
 
   useEffect(() => {
-    if (!messagesRef.current) return
-    messagesRef.current.scrollTop = messagesRef.current.scrollHeight
-  }, [messages])
+    if (!messagesRef.current) return;
+    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+  }, [messages]);
 
   return (
     <div className="w-screen h-screen flex flex-col overflow-hidden">
@@ -99,12 +106,12 @@ export default () => {
 
           <div className="w-full flex">
             <textarea
-              className="flex-1 min-h-[1lh] max-h-[10lh] px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent field-sizing-content resize-none"
-              placeholder={t('placeholder')}
+              className="flex-1 min-h-lh max-h-[10lh] px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent field-sizing-content resize-none"
+              placeholder={t("placeholder")}
               value={value.trim()}
-              onChange={e => setValue(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') handleSendMessage()
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSendMessage();
               }}
             />
 
@@ -112,7 +119,7 @@ export default () => {
               className="ml-4 cursor-pointer px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 border border-gray-300"
               disabled={isStreaming}
               value={model}
-              onChange={e => setModel(e.target.value)}
+              onChange={(e) => setModel(e.target.value)}
             >
               {[...ollamaModelList, ...modelList].map(({ label }) => (
                 <option key={label} value={label}>
@@ -126,11 +133,11 @@ export default () => {
               onClick={handleSendMessage}
               disabled={isStreaming}
             >
-              {isStreaming ? t('generating') : t('send')}
+              {isStreaming ? t("generating") : t("send")}
             </button>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

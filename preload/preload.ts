@@ -17,6 +17,8 @@ const api = {
     ipcRenderer.send(CHANNELS.WINDOW_ACTION, action, state),
   createWindow: (windowName: WindowName) =>
     ipcRenderer.send(CHANNELS.CREATE_WINDOW, windowName),
+  getCurrentWindowState: (state: string) =>
+    ipcRenderer.invoke(CHANNELS.GET_CURRENT_WINDOW_STATE, state),
 
   sendState: (
     targetWindow: WindowName | 'all',
@@ -28,12 +30,14 @@ const api = {
     callback: (payload: CommunicationPayload) => void
   ) => ipcRenderer.on(channel, (_, payload) => callback(payload)),
 
-  encryptStr: (str: string) => ipcRenderer.invoke(CHANNELS.ENCRYPT_STR, str),
-  decryptStr: (str: string) => ipcRenderer.invoke(CHANNELS.DECRYPT_STR, str),
+  encryptStr: (password: string, str: string) =>
+    ipcRenderer.invoke(CHANNELS.ENCRYPT_STR, password, str),
+  decryptStr: (password: string, str: string) =>
+    ipcRenderer.invoke(CHANNELS.DECRYPT_STR, password, str),
 
   importConfig: () => ipcRenderer.invoke(CHANNELS.IMPORT_CONFIG),
-  exportConfig: (path: string, config: any, filename: string) =>
-    ipcRenderer.invoke(CHANNELS.EXPORT_CONFIG, path, config, filename),
+  exportConfig: (path: string, config: any) =>
+    ipcRenderer.invoke(CHANNELS.EXPORT_CONFIG, path, config),
 
   chatWithAgent: (
     options: AgentOptions,

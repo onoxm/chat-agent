@@ -1,5 +1,7 @@
 export const CHANNELS = {
   WINDOW_ACTION: 'window-action',
+  GET_CURRENT_WINDOW_STATE: 'get-current-window-state',
+
   CHAT_WITH_AGENT: 'chat-with-agent',
   CHAT_WITH_AGENT_STREAM: 'chat-with-agent-stream',
 

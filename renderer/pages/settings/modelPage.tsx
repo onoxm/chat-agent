@@ -5,7 +5,10 @@ import { ModelInfo } from '@types'
 import { toast } from 'ono-react-element'
 
 export const ModelPage = () => {
-  const modelList = useStore('modelList')
+  const { modelList, encryptionPassphrase } = useStore([
+    'modelList',
+    'encryptionPassphrase'
+  ])
 
   const updateModel = (modelInfo: Partial<ModelInfo>, index: number) => {
     const newModelList = [...modelList]
@@ -42,11 +45,9 @@ export const ModelPage = () => {
               const modelList =
                 (await window.api.importConfig()) as unknown as ModelInfo[]
 
-              if (modelList) {
-                useStore.setState({ modelList })
-
-                toast.success('导入成功')
-              }
+              if (!modelList) return
+              useStore.setState({ modelList })
+              toast.success('导入成功')
             }}
           >
             <DownloadSimpleIcon size={16} />
@@ -56,11 +57,7 @@ export const ModelPage = () => {
           <button
             className="flex items-center gap-1 cursor-pointer px-2 py-1 bg-blue-500 text-white rounded-lg"
             onClick={async () => {
-              await window.api.exportConfig(
-                'E:\\desktop',
-                modelList,
-                'models.json'
-              )
+              await window.api.exportConfig('E:\\desktop', modelList)
 
               toast.success('导出成功')
             }}
@@ -98,6 +95,7 @@ export const ModelPage = () => {
           apiKey={apiKey}
           updateModel={model => updateModel(model, i)}
           deleteModel={() => deleteModel(i)}
+          password={encryptionPassphrase}
         />
       ))}
     </div>

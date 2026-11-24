@@ -8,6 +8,7 @@ interface ModelCardProps {
   label: string
   url: string
   apiKey: string
+  password: string
   updateModel: (modelInfo: Partial<ModelInfo>) => void
   deleteModel: () => void
 }
@@ -16,6 +17,7 @@ export const ModelCard = ({
   label,
   url,
   apiKey,
+  password,
   updateModel,
   deleteModel
 }: ModelCardProps) => {
@@ -46,7 +48,7 @@ export const ModelCard = ({
       value: innerApiKey,
       onChange: async (e: React.ChangeEvent<HTMLInputElement>) => {
         setInnerApiKey(e.target.value)
-        const encryptStr = await window.api.encryptStr(e.target.value)
+        const encryptStr = await window.api.encryptStr(password, e.target.value)
         updateModel({
           apiKey: encryptStr
         })
@@ -56,7 +58,7 @@ export const ModelCard = ({
 
   const decryptStr = async (str: string) => {
     try {
-      const plain = await window.api.decryptStr(str)
+      const plain = await window.api.decryptStr(password, str)
       setInnerApiKey(plain)
 
       // 旧版 safeStorage 密文无法用新方案解密：清空存储并提示重填
