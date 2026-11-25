@@ -1,11 +1,2 @@
-* {
-  user-select: none;
-}
-
-.drag {
-  app-region: drag;
-}
-
-.no-drag {
-  app-region: no-drag;
-}
+@import './styles/variables.css';
+@import './styles/global.css';

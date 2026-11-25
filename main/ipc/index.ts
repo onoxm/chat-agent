@@ -17,13 +17,23 @@ interface IpcMainAction {
   }[]
 }
 
-export const ipcMainAction: IpcMainAction = {
-  on: [chatWithAgent, windowBasicAction, createWindow, syncWindowState],
-  handle: [
-    encryptStr,
-    decryptStr,
-    exportConfig,
-    importConfig,
-    getCurrentWindowState
-  ]
+interface IpcAction {
+  global: IpcMainAction
+  main: IpcMainAction
+  settings: IpcMainAction
+}
+
+export const ipcAction: IpcAction = {
+  global: {
+    on: [windowBasicAction, createWindow, syncWindowState],
+    handle: [decryptStr, getCurrentWindowState]
+  },
+  main: {
+    on: [chatWithAgent],
+    handle: []
+  },
+  settings: {
+    on: [],
+    handle: [encryptStr, exportConfig, importConfig]
+  }
 }

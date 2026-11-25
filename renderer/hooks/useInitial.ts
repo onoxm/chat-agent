@@ -4,8 +4,12 @@ import { CHANNELS, WindowAction } from '@types'
 import { useTheme } from 'ono-react-element'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router'
 
 export const useInitial = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const { i18n } = useTranslation()
   const { theme, language, alwaysOnTop } = useStore([
     'theme',
@@ -13,16 +17,25 @@ export const useInitial = () => {
     'alwaysOnTop'
   ])
 
+  const redirectWindow = () => {
+    const windowName = (new URLSearchParams(location.search).get('window') ??
+      'main') as string
+    if (windowName === 'main') return navigate('/chat')
+    navigate(`/${windowName}`)
+  }
+
   const { cycleTheme } = useTheme({
     theme,
-    onDark: () => document.body.classList.add('dark'),
-    onLight: () => document.body.classList.remove('dark')
+    onDark: () => document.documentElement.classList.add('dark'),
+    onLight: () => document.documentElement.classList.remove('dark')
   })
 
   useEffect(() => {
-    window.api.onState(CHANNELS.ON_WINDOW_STATE, ({ type, data }) => {
+    window.api.onState(CHANNELS.ON_WINDOW_STATE, ({ type, data }) =>
       useStore.setState({ [type]: data })
-    })
+    )
+
+    redirectWindow()
   }, [])
 
   useEffect(() => {
@@ -38,4 +51,11 @@ export const useInitial = () => {
     if (alwaysOnTop !== undefined)
       window.api.windowAction(WindowAction.AlwaysOnTop, alwaysOnTop)
   }, [alwaysOnTop])
+
+  // 首次加载时同步窗口当前是否最大化
+  useEffect(() => {
+    window.api.getCurrentWindowState('maximized').then(value => {
+      useStore.setState({ maximized: Boolean(value) })
+    })
+  }, [])
 }

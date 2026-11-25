@@ -1,2 +1,2 @@
-export * from './WindowService'
 export * from './createSettingsWindow'
+export * from './WindowService'

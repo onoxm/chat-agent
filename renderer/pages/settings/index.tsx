@@ -1,4 +1,3 @@
-import { HeadBar } from '@/components'
 import { chainClassNames, SliderList } from 'ono-react-element'
 import { useState } from 'react'
 import { CommonPage } from './commonPage'
@@ -19,12 +18,11 @@ export default () => {
   ]
 
   return (
-    <div className="w-screen h-screen flex flex-col">
-      <HeadBar />
+    <>
       <SliderList
         list={tabList}
         className="flex items-center gap-4"
-        slider={Slider => <Slider className="rounded-md !bg-[pink]" />}
+        slider={Slider => <Slider className="rounded-md bg-[pink]!" />}
       >
         {({ item, isActive }) => (
           <li
@@ -41,6 +39,6 @@ export default () => {
       </SliderList>
 
       {tab === 'common' ? <CommonPage /> : <ModelPage />}
-    </div>
+    </>
   )
 }

@@ -6,10 +6,9 @@
     "maximize": "Maximize",
     "close": "Close"
   },
-  "homepage": {
-    "placeholder": "Chat with agent",
-    "send": "Send",
-    "generating": "Generating..."
+  "chatPage": {
+    "placeholder": "Send a message to ChatAgent...",
+    "send": "Send"
   },
   "navBar": {
     "chat": "Chat",

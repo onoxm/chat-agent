@@ -1,0 +1,99 @@
+:root {
+  /* 品牌色 */
+  --color-brand-50: #f2f5ff;
+  --color-brand-100: #e3e8fc;
+  --color-brand-200: #c9cff7;
+  --color-brand-500: #5c66e3;
+  --color-brand-600: #4a54d6;
+  --color-brand-700: #3d47b5;
+  /* 品牌色 · 实心填充与浅色底 */
+  --color-brand-solid: #5c66e3; /* 主按钮实心底色 */
+  --color-brand-solid-hover: #4a54d6;
+  --color-brand-soft: rgba(92, 102, 227, 0.1); /* 选中态、浅色标签底 */
+  --color-brand-softer: rgba(92, 102, 227, 0.055); /* 更弱的底色、聚焦光晕 */
+  --color-on-brand: #ffffff;
+
+  /* 中性色 · 文字 */
+  --color-ink-900: #171a21;
+  --color-ink-700: #363b47;
+  --color-ink-600: #4f5463;
+  --color-ink-500: #6b7385;
+  --color-ink-400: #99a1b0;
+  --color-ink-300: #c2c7d4;
+
+  /* 中性色 · 描边 */
+  --color-line-300: #d3d9e5; /* 强调描边、输入框边框 */
+  --color-line-200: #e2e6ef;
+  --color-line-100: #edf0f5;
+
+  /* 中性色 · 背景 */
+  --color-surface-rail: #fbfcfe; /* 左侧图标栏 */
+  --color-surface-panel: #f8fafd; /* 标题栏、侧边栏 */
+  --color-surface-base: #ffffff;
+  --color-surface-subtle: #f1f4f9; /* 悬浮态、chip、代码行内背景 */
+  --color-surface-muted: #f7fafc;
+  --color-canvas: #f2f5fa;
+
+  /* 语义色 */
+  --color-success-600: #14a34a;
+  --color-success-100: #e5f5ed;
+  --color-danger-600: #d92e21;
+  --color-danger-100: #fcedeb;
+  --color-warn-600: #b54708;
+  --color-warn-100: #fcf2e8;
+
+  /* 代码块 */
+  --color-code-bg: #131826;
+  --color-code-ink: #dfe4ff;
+  --color-code-line: #232b41;
+}
+
+:root.dark {
+  /* 品牌色 */
+  --color-brand-50: #151a2c;
+  --color-brand-100: #1d2440;
+  --color-brand-200: #2d3663;
+  --color-brand-500: #8b93f4;
+  --color-brand-600: #a4abf7;
+  --color-brand-700: #c7ccff;
+  /* 品牌色 · 实心填充与浅色底 */
+  --color-brand-solid: #5c66e3;
+  --color-brand-solid-hover: #6d77ea;
+  --color-brand-soft: rgba(139, 147, 244, 0.14);
+  --color-brand-softer: rgba(139, 147, 244, 0.07);
+  --color-on-brand: #ffffff;
+
+  /* 中性色 · 文字 */
+  --color-ink-900: #e9edf5;
+  --color-ink-700: #c5ccda;
+  --color-ink-600: #a8b0c2;
+  --color-ink-500: #98a1b4;
+  --color-ink-400: #6f7a8b;
+  --color-ink-300: #5a6374;
+
+  /* 中性色 · 描边 */
+  --color-line-300: #333d4c;
+  --color-line-200: #252d39;
+  --color-line-100: #1f242e;
+
+  /* 中性色 · 背景 */
+  --color-surface-rail: #151a21;
+  --color-surface-panel: #12171e;
+  --color-surface-base: #1c232d;
+  --color-surface-subtle: #232b37;
+  --color-surface-muted: #151a21;
+  --color-canvas: #0f1218;
+
+  /* 语义色 */
+  --color-success-600: #35c077;
+  --color-success-100: #10251a;
+  --color-danger-600: #f0665a;
+  --color-danger-100: #2c1512;
+  --color-warn-600: #e8933a;
+  --color-warn-100: #2b1e0d;
+
+  /* 代码块 */
+  --color-code-bg: #0b0f15;
+  --color-code-ink: #dbe1ff;
+  --color-code-line: #1d2634;
+}

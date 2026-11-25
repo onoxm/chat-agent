@@ -1,6 +1,5 @@
 import { event } from '@/event'
 import { useStore } from '@/store'
-import { TITLE_BAR_ICON_SIZE } from '@common'
 import {
   ChatTextIcon,
   DesktopIcon,
@@ -8,23 +7,23 @@ import {
   MoonIcon,
   SunIcon
 } from '@phosphor-icons/react'
-import type { ThemeMode } from 'ono-react-element'
+import { chainClassNames, Tooltip, type ThemeMode } from 'ono-react-element'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router'
 
 interface ActionItem {
   title: string
   label: string
   Icon: React.FC<{ size: number }>
+  activeRule?: (pathname: string) => boolean
   onClick: () => void
 }
 
-interface NavBarProps {
-  navBarWidth: number
-  toggleChatBar: () => void
-}
-
-export const NavBar = ({ toggleChatBar, navBarWidth }: NavBarProps) => {
+export const NavBar = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const { t } = useTranslation()
+  const asideShow = useStore('asideShow')
   const theme = useStore('theme')
 
   const navList: ActionItem[][] = [
@@ -32,8 +31,14 @@ export const NavBar = ({ toggleChatBar, navBarWidth }: NavBarProps) => {
       {
         title: '聊天',
         label: t('navBar.chat'),
+        activeRule: (pathname: string) => pathname.includes('/chat'),
         Icon: ({ size }) => <ChatTextIcon size={size} />,
-        onClick: toggleChatBar
+        onClick: () => {
+          navigate('/chat')
+          useStore.setState({
+            asideShow: !asideShow
+          })
+        }
       }
     ],
     [
@@ -70,23 +75,26 @@ export const NavBar = ({ toggleChatBar, navBarWidth }: NavBarProps) => {
   ]
 
   return (
-    <div
-      className="h-full bg-white dark:bg-black border-r border-gray-300 relative z-10 flex flex-col justify-between items-center drag"
-      style={{ width: navBarWidth }}
-    >
+    <aside className="h-full p-2.5 border-r border-line-200 relative z-10 flex flex-col justify-between items-center drag">
       {navList.map((nav, i) => (
         <div key={i} className="flex flex-col items-center">
-          {nav.map(({ title, Icon, onClick }) => (
-            <button
-              key={title}
-              className="p-2 flex items-center gap-2 cursor-pointer rounded-sm hover:text-gray-700 dark:text-white no-drag"
-              onClick={onClick}
-            >
-              <Icon size={TITLE_BAR_ICON_SIZE} />
-            </button>
+          {nav.map(({ title, label, Icon, activeRule, onClick }) => (
+            <Tooltip key={title} content={label} placement="right">
+              <button
+                className={chainClassNames(
+                  'p-2 flex items-center gap-2 cursor-pointer rounded-[10px] no-drag',
+                  activeRule?.(location.pathname)
+                    ? 'text-brand-solid bg-brand-soft'
+                    : 'text-ink-500'
+                )}
+                onClick={onClick}
+              >
+                <Icon size={20} />
+              </button>
+            </Tooltip>
           ))}
         </div>
       ))}
-    </div>
+    </aside>
   )
 }

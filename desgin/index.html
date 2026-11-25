@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChatAgent · 首页设计探索</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+          'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+        color: #171a21;
+        background:
+          radial-gradient(
+            1100px 520px at 50% -14%,
+            #ffffff 0%,
+            rgba(255, 255, 255, 0) 66%
+          ),
+          radial-gradient(rgba(23, 26, 33, 0.045) 1px, transparent 1px) 0 0 /
+            24px 24px,
+          #eef1f6;
+        padding: 42px 40px 54px;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      ::selection {
+        background: rgba(92, 102, 227, 0.22);
+      }
+      .icon {
+        width: 18px;
+        height: 18px;
+        display: block;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .icon-fill {
+        fill: currentColor;
+        stroke: none;
+      }
+
+      .wrap {
+        width: 100%;
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+
+      /* ============ 页头 ============ */
+      .head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 28px;
+        padding-bottom: 28px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid rgba(23, 26, 33, 0.1);
+      }
+      .brand-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 18px;
+      }
+      .logo {
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        color: #fff;
+        background: linear-gradient(140deg, #7b84f0, #4a54d6);
+        box-shadow: 0 6px 14px -6px rgba(92, 102, 227, 0.9);
+      }
+      .logo .icon {
+        width: 13px;
+        height: 13px;
+      }
+      .brand {
+        font-size: 12.5px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+      .eyebrow {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        color: #6b7385;
+      }
+      h1 {
+        margin: 10px 0 0;
+        font-size: 34px;
+        line-height: 1.28;
+        font-weight: 650;
+        letter-spacing: -0.03em;
+        color: #171a21;
+      }
+      h1 .accent {
+        color: #5c66e3;
+      }
+      .lede {
+        margin: 12px 0 0;
+        max-width: 560px;
+        font-size: 13px;
+        line-height: 1.8;
+        color: #5f6675;
+      }
+      .head-meta {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 7px;
+        font-size: 10.5px;
+        color: #7c8496;
+        text-align: right;
+      }
+      .head-meta .row {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .head-meta .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #14a34a;
+      }
+      .head-meta kbd {
+        font-family: inherit;
+        font-size: 9.5px;
+        padding: 2px 5px;
+        border: 1px solid rgba(23, 26, 33, 0.12);
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.7);
+        color: #6b7385;
+      }
+
+      /* ============ 卡片 ============ */
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgba(23, 26, 33, 0.09);
+        border-radius: 16px;
+        background: #fff;
+        box-shadow:
+          0 1px 2px rgba(23, 26, 33, 0.04),
+          0 22px 50px -38px rgba(23, 26, 33, 0.5);
+        transition:
+          transform 0.24s cubic-bezier(0.2, 0.7, 0.3, 1),
+          box-shadow 0.24s;
+      }
+      .card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 3px;
+        z-index: 3;
+        background: var(--accent, #5c66e3);
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow:
+          0 1px 2px rgba(23, 26, 33, 0.04),
+          0 34px 70px -40px rgba(23, 26, 33, 0.55);
+      }
+      .shot {
+        position: relative;
+        display: block;
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+        background: var(--shot-bg, #f2f5fa);
+        border-bottom: 1px solid rgba(23, 26, 33, 0.07);
+      }
+      .shot img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: top center;
+        transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+      }
+      .card:hover .shot img {
+        transform: scale(1.015);
+      }
+      .shot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(10, 14, 22, 0) 58%,
+          rgba(10, 14, 22, 0.24)
+        );
+        opacity: 0;
+        transition: opacity 0.24s;
+      }
+      .card:hover .shot::after {
+        opacity: 1;
+      }
+      .shot-cta {
+        position: absolute;
+        left: 14px;
+        bottom: 12px;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.94);
+        color: #171a21;
+        font-size: 10.5px;
+        font-weight: 600;
+        box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transform: translateY(4px);
+        transition:
+          opacity 0.22s,
+          transform 0.22s;
+      }
+      .shot-cta .icon {
+        width: 12px;
+        height: 12px;
+      }
+      .card:hover .shot-cta {
+        opacity: 1;
+        transform: none;
+      }
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 18px 20px 17px;
+      }
+      .card-top {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .ver {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        padding: 3px 6px;
+        border-radius: 5px;
+        color: var(--accent, #5c66e3);
+        background: var(--accent-soft, rgba(92, 102, 227, 0.09));
+      }
+      .card-name {
+        font-size: 16px;
+        font-weight: 650;
+        letter-spacing: -0.015em;
+        color: #171a21;
+      }
+      .card-tag {
+        margin-left: auto;
+        font-size: 9.5px;
+        color: #99a1b0;
+      }
+      .card-desc {
+        margin: 9px 0 0;
+        font-size: 11.5px;
+        line-height: 1.75;
+        color: #5f6675;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 13px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #f4f6fa;
+        border: 1px solid rgba(23, 26, 33, 0.06);
+        font-size: 9.5px;
+        color: #6b7385;
+      }
+      .chip .icon {
+        width: 10px;
+        height: 10px;
+        color: var(--accent, #5c66e3);
+      }
+      .card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 15px;
+        padding-top: 13px;
+        border-top: 1px solid rgba(23, 26, 33, 0.07);
+      }
+      .open-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 650;
+        color: var(--accent, #5c66e3);
+      }
+      .open-link .icon {
+        width: 13px;
+        height: 13px;
+        transition: transform 0.2s;
+      }
+      .card:hover .open-link .icon {
+        transform: translate(2px, -2px);
+      }
+      .states {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 9.5px;
+        color: #99a1b0;
+        white-space: nowrap;
+      }
+      .states .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--accent, #5c66e3);
+        opacity: 0.7;
+      }
+
+      /* ============ 页脚 ============ */
+      .foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px 24px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(23, 26, 33, 0.1);
+        font-size: 10.5px;
+        color: #7c8496;
+      }
+      .foot .note {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .foot .note .icon {
+        width: 12px;
+        height: 12px;
+        opacity: 0.7;
+      }
+      .foot .swatches {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .sw {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+      }
+      .sw i {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        border: 1px solid rgba(23, 26, 33, 0.12);
+        display: block;
+      }
+
+      @media (max-width: 940px) {
+        body {
+          padding: 28px 22px 40px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .head-meta {
+          align-items: flex-start;
+          text-align: left;
+        }
+        h1 {
+          font-size: 28px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="i-spark" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          stroke="none"
+          d="M12 2.6l2.1 5.9 5.9 2.1-5.9 2.1L12 18.6l-2.1-5.9L3.9 10.6l5.9-2.1z"
+        />
+      </symbol>
+      <symbol id="i-arrow-up-right" viewBox="0 0 24 24">
+        <path d="M7 17 17 7M8 7h9v9" />
+      </symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24">
+        <path d="m12 3 9 5-9 5-9-5z" />
+        <path d="m3 13 9 5 9-5" />
+      </symbol>
+      <symbol id="i-type" viewBox="0 0 24 24">
+        <path d="M4 7V5h16v2M12 5v14M9 19h6" />
+      </symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+      </symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="m7 9 3 3-3 3M13 15h4" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m20 6-11 11-5-5" />
+      </symbol>
+    </svg>
+
+    <div class="wrap">
+      <header class="head">
+        <div>
+          <div class="brand-row">
+            <span class="logo">
+              <svg class="icon icon-fill" aria-hidden="true">
+                <use href="#i-spark" />
+              </svg>
+            </span>
+            <span class="brand">ChatAgent</span>
+            <span class="eyebrow">DESIGN EXPLORATION</span>
+          </div>
+          <h1>首页，可以长成<span class="accent">四种样子</span>。</h1>
+          <p class="lede">
+            同一套功能与品牌资产，四种不同的气质：熟悉的工作区、安静的编辑台、信息密集的仪表盘，以及开发者熟悉的终端。先看效果，再定方向。
+          </p>
+        </div>
+        <div class="head-meta">
+          <span class="row"><span class="dot"></span>4 个方向 · 均已可用</span>
+          <span>1280 × 800 · 纯静态 HTML</span>
+          <span>本地预览，无外链资源 · <kbd>点击卡片打开</kbd></span>
+        </div>
+      </header>
+
+      <main class="grid">
+        <!-- v1 -->
+        <a
+          class="card"
+          href="v1-theme.html"
+          style="
+            --accent: #5c66e3;
+            --accent-soft: rgba(92, 102, 227, 0.09);
+            --shot-bg: #f2f5fa;
+          "
+        >
+          <div class="shot">
+            <img src="previews/v1.png" alt="v1 经典工作区首页预览" />
+            <span class="shot-cta">
+              查看设计稿
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-arrow-up-right" />
+              </svg>
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <span class="ver">V1</span>
+              <span class="card-name">经典工作区</span>
+              <span class="card-tag">最贴近当前结构</span>
+            </div>
+            <p class="card-desc">
+              左侧会话列表、中间对话流、底部输入。布局与现有产品一致，改造范围最小，明暗主题都已适配。
+            </p>
+            <div class="chips">
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-layers" /></svg
+                >三栏结构</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >会话列表</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >明暗主题</span
+              >
+            </div>
+            <div class="card-foot">
+              <span class="open-link">
+                打开设计稿
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-arrow-up-right" />
+                </svg>
+              </span>
+              <span class="states"
+                ><span class="dot"></span>空状态 / 对话中</span
+              >
+            </div>
+          </div>
+        </a>
+
+        <!-- v2 -->
+        <a
+          class="card"
+          href="v2-minimal.html"
+          style="
+            --accent: #be5b2e;
+            --accent-soft: rgba(190, 91, 46, 0.09);
+            --shot-bg: #fcfaf6;
+          "
+        >
+          <div class="shot">
+            <img src="previews/v2.png" alt="v2 极简编辑风首页预览" />
+            <span class="shot-cta">
+              查看设计稿
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-arrow-up-right" />
+              </svg>
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <span class="ver">V2</span>
+              <span class="card-name">极简编辑</span>
+              <span class="card-tag">把回答当成文章</span>
+            </div>
+            <p class="card-desc">
+              暖白纸感、衬线大标题、没有侧栏。单栏 684px
+              的阅读宽度，让模型回答像一篇被认真排版的长文。
+            </p>
+            <div class="chips">
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-type" /></svg
+                >衬线标题</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >暖白纸感</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >单栏阅读</span
+              >
+            </div>
+            <div class="card-foot">
+              <span class="open-link">
+                打开设计稿
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-arrow-up-right" />
+                </svg>
+              </span>
+              <span class="states"
+                ><span class="dot"></span>空状态 / 对话中</span
+              >
+            </div>
+          </div>
+        </a>
+
+        <!-- v3 -->
+        <a
+          class="card"
+          href="v3-workspace.html"
+          style="
+            --accent: #4a54d6;
+            --accent-soft: rgba(74, 84, 214, 0.09);
+            --shot-bg: #f2f5fa;
+          "
+        >
+          <div class="shot">
+            <img src="previews/v3.png" alt="v3 工作台风首页预览" />
+            <span class="shot-cta">
+              查看设计稿
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-arrow-up-right" />
+              </svg>
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <span class="ver">V3</span>
+              <span class="card-name">生产力工作台</span>
+              <span class="card-tag">先看状态，再进入对话</span>
+            </div>
+            <p class="card-desc">
+              顶部标签加仪表盘：继续上次、模型状态、今日用量、快捷指令。适合每天高频使用，一眼掌握全部状态。
+            </p>
+            <div class="chips">
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-grid" /></svg
+                >仪表盘卡片</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >继续上次</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >底部输入 dock</span
+              >
+            </div>
+            <div class="card-foot">
+              <span class="open-link">
+                打开设计稿
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-arrow-up-right" />
+                </svg>
+              </span>
+              <span class="states"><span class="dot"></span>明暗主题</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- v4 -->
+        <a
+          class="card"
+          href="v4-terminal.html"
+          style="
+            --accent: #2f9e63;
+            --accent-soft: rgba(62, 224, 138, 0.12);
+            --shot-bg: #080c11;
+          "
+        >
+          <div class="shot">
+            <img src="previews/v4.png" alt="v4 深色终端风首页预览" />
+            <span class="shot-cta">
+              查看设计稿
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-arrow-up-right" />
+              </svg>
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <span class="ver">V4</span>
+              <span class="card-name">深色终端</span>
+              <span class="card-tag">写给开发者</span>
+            </div>
+            <p class="card-desc">
+              近黑底、等宽字体、荧光绿强调。用提示符和指令代替按钮，像在终端里和模型对话。
+            </p>
+            <div class="chips">
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-terminal" /></svg
+                >终端提示符</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >等宽字体</span
+              >
+              <span class="chip"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#i-check" /></svg
+                >状态栏常驻</span
+              >
+            </div>
+            <div class="card-foot">
+              <span class="open-link">
+                打开设计稿
+                <svg class="icon" aria-hidden="true">
+                  <use href="#i-arrow-up-right" />
+                </svg>
+              </span>
+              <span class="states"
+                ><span class="dot"></span>空状态 / 对话中</span
+              >
+            </div>
+          </div>
+        </a>
+      </main>
+
+      <footer class="foot">
+        <span class="note">
+          <svg class="icon" aria-hidden="true"><use href="#i-spark" /></svg>
+          V1 / V3 对齐 renderer/styles/variables.css 设计变量，V2 / V4
+          为独立视觉探索。
+        </span>
+        <span class="swatches">
+          <span class="sw"><i style="background: #5c66e3"></i>Brand</span>
+          <span class="sw"><i style="background: #be5b2e"></i>Paper</span>
+          <span class="sw"><i style="background: #3ee08a"></i>Neon</span>
+          <span class="sw"><i style="background: #f2f5fa"></i>Canvas</span>
+          <span>1280 × 800 预览</span>
+        </span>
+      </footer>
+    </div>
+  </body>
+</html>

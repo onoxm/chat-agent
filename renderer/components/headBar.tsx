@@ -1,88 +1,88 @@
 import { useStore } from '@/store'
-import { TITLE_BAR_ICON_SIZE } from '@common'
 import {
-  ArrowsInSimpleIcon,
-  ArrowsOutSimpleIcon,
+  CardsIcon,
   MinusIcon,
   PushPinSimpleIcon,
   PushPinSimpleSlashIcon,
+  SquareIcon,
   XIcon
 } from '@phosphor-icons/react'
 import { WindowAction } from '@types'
-import { useMemo, useState } from 'react'
+import { chainClassNames } from 'ono-react-element'
+import { useMemo } from 'react'
+import { useLocation } from 'react-router'
 import { JSX } from 'react/jsx-dev-runtime'
 import logo from '../../public/logo.png'
 
-const hash = window.location.hash.slice(1) as string
+interface HeaderIconInfo {
+  Icon: ({ size }: { size: number }) => JSX.Element
+  action: WindowAction
+}
 
 export const HeadBar = () => {
-  const alwaysOnTop = useStore('alwaysOnTop')
-
-  const [isFullScreen, setFullScreen] = useState(false)
+  const location = useLocation()
+  const { alwaysOnTop, maximized } = useStore(['alwaysOnTop', 'maximized'])
 
   const windowAction = window.api.windowAction
 
-  const windowBtnList = useMemo<
-    { icon: JSX.Element; action: WindowAction; onClick?: () => void }[]
-  >(() => {
+  const windowBtnList = useMemo<HeaderIconInfo[]>(() => {
     const alwaysOnTopArr =
-      hash === 'settings'
+      location.pathname === '/settings'
         ? []
         : [
             {
               action: WindowAction.AlwaysOnTop,
-              icon: alwaysOnTop ? (
-                <PushPinSimpleIcon size={TITLE_BAR_ICON_SIZE} />
-              ) : (
-                <PushPinSimpleSlashIcon size={TITLE_BAR_ICON_SIZE} />
-              )
-            }
+              Icon: ({ size }) =>
+                alwaysOnTop ? (
+                  <PushPinSimpleIcon size={size} />
+                ) : (
+                  <PushPinSimpleSlashIcon size={size} />
+                )
+            } as HeaderIconInfo
           ]
 
     return [
       ...alwaysOnTopArr,
       {
         action: WindowAction.Minimize,
-        icon: <MinusIcon size={TITLE_BAR_ICON_SIZE} color="green" />
+        Icon: ({ size }) => <MinusIcon size={size} />
       },
       {
         action: WindowAction.Maximize,
-        icon: isFullScreen ? (
-          <ArrowsInSimpleIcon size={TITLE_BAR_ICON_SIZE} color="orange" />
-        ) : (
-          <ArrowsOutSimpleIcon size={TITLE_BAR_ICON_SIZE} color="orange" />
-        ),
-        onClick: async () => {
-          const bl = (await window.api.getCurrentWindowState(
-            'maximize'
-          )) as boolean
-          setFullScreen(bl)
-        }
+        Icon: ({ size }) =>
+          maximized ? <CardsIcon size={size} /> : <SquareIcon size={size} />
       },
       {
         action: WindowAction.Close,
-        icon: <XIcon size={TITLE_BAR_ICON_SIZE} color="red" />
+        Icon: ({ size }) => <XIcon size={size} />
       }
     ]
-  }, [alwaysOnTop, isFullScreen])
+  }, [alwaysOnTop, maximized, location.pathname])
 
   return (
-    <div className="w-full shrink-0 flex items-center justify-between gap-4 drag p-2 border-b border-gray-300">
+    <div className="w-full shrink-0 flex items-center justify-between gap-4 drag p-2 border-b border-line-200">
       <img src={logo} className="size-6" />
 
       <div className="flex flex-1 gap-4 justify-end">
-        {windowBtnList.map(({ action, icon, onClick }) => (
+        {windowBtnList.map(({ action, Icon }) => (
           <button
             key={action}
-            className="cursor-pointer no-drag"
+            className={chainClassNames(
+              'p-1.75 rounded-[7px] text-ink-400 cursor-pointer no-drag',
+              action === WindowAction.Close
+                ? 'hover:bg-danger-600 hover:text-on-brand'
+                : 'hover:bg-surface-subtle hover:text-ink-700',
+              action === WindowAction.AlwaysOnTop && alwaysOnTop
+                ? 'text-ink-700'
+                : ''
+            )}
             onClick={() => {
               if (action === WindowAction.AlwaysOnTop)
                 useStore.setState({ alwaysOnTop: !alwaysOnTop })
               else windowAction(action)
-              onClick?.()
             }}
           >
-            {icon}
+            <Icon size={16} />
           </button>
         ))}
       </div>

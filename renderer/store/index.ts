@@ -7,10 +7,11 @@ const initialState = {
   language: 'zh',
   asideShow: true,
   asideWidth: 240,
-  asideWidthScope: [200, 300],
+  asideWidthScope: [200, 320],
   alwaysOnTop: false,
+  maximized: false,
   encryptionPassphrase: 'abcd123456',
-  defaultModel: '',
+  defaultModel: {} as ModelInfo,
   modelList: [] as ModelInfo[]
 }
 

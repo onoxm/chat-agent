@@ -14,8 +14,8 @@ export const ModelPage = () => {
     const newModelList = [...modelList]
     newModelList[index] = { ...newModelList[index], ...modelInfo }
 
-    if (modelList.length === 0)
-      window.api.sendState('main', 'defaultModel', newModelList[index].label)
+    if (!modelList.length)
+      window.api.sendState('main', 'defaultModel', newModelList[0])
 
     useStore.setState({ modelList: newModelList })
 
@@ -29,8 +29,7 @@ export const ModelPage = () => {
 
     window.api.sendState('main', 'modelList', newModelList)
 
-    if (newModelList.length === 0)
-      window.api.sendState('main', 'defaultModel', '')
+    if (!newModelList.length) window.api.sendState('main', 'defaultModel', {})
   }
 
   return (
@@ -57,9 +56,12 @@ export const ModelPage = () => {
           <button
             className="flex items-center gap-1 cursor-pointer px-2 py-1 bg-blue-500 text-white rounded-lg"
             onClick={async () => {
-              await window.api.exportConfig('E:\\desktop', modelList)
+              const filePath = await window.api.exportConfig(
+                'E:\\desktop',
+                modelList
+              )
 
-              toast.success('导出成功')
+              if (filePath) toast.success('导出成功')
             }}
           >
             <ExportIcon size={16} />
@@ -69,6 +71,11 @@ export const ModelPage = () => {
           <button
             className="flex items-center gap-1 cursor-pointer px-2 py-1 bg-blue-500 text-white rounded-lg"
             onClick={() => {
+              if (modelList.length === 0)
+                return useStore.setState(({ modelList }) => ({
+                  modelList: [...modelList, { label: '', url: '', apiKey: '' }]
+                }))
+
               const lastModel = modelList[modelList.length - 1]
               if (
                 lastModel.apiKey === '' ||

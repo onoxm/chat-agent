@@ -6,10 +6,9 @@
     "maximize": "最大化",
     "close": "关闭"
   },
-  "homepage": {
-    "placeholder": "请输入内容",
-    "send": "发送",
-    "generating": "生成中..."
+  "chatPage": {
+    "placeholder": "给 ChatAgent 发送消息…",
+    "send": "发送"
   },
   "navBar": {
     "chat": "聊天",

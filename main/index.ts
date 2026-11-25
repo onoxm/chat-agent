@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import started from 'electron-squirrel-startup'
-import { ipcMainAction } from './ipc'
+import { ipcAction } from './ipc'
 import { createTray } from './tray'
 import { windowManager } from './window'
 
@@ -34,9 +34,11 @@ app.whenReady().then(() => {
   // const menu = Menu.buildFromTemplate([...appMenu, ...menuTemplate]);
   // Menu.setApplicationMenu(menu);
 
-  ipcMainAction.on.forEach(({ channel, handle }) => ipcMain.on(channel, handle))
+  ipcAction.global.on.forEach(({ channel, handle }) =>
+    ipcMain.on(channel, handle)
+  )
 
-  ipcMainAction.handle.forEach(({ channel, handle }) =>
+  ipcAction.global.handle.forEach(({ channel, handle }) =>
     ipcMain.handle(channel, handle)
   )
 

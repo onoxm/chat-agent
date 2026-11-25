@@ -1,5 +1,10 @@
-import { WindowName } from '@types'
-import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
+import { ipcAction } from '@main/ipc'
+import { CHANNELS, WindowName } from '@types'
+import {
+  BrowserWindow,
+  BrowserWindowConstructorOptions,
+  ipcMain
+} from 'electron'
 import path from 'node:path'
 
 type WindowServiceOptions = BrowserWindowConstructorOptions & {
@@ -8,11 +13,11 @@ type WindowServiceOptions = BrowserWindowConstructorOptions & {
 
 const basicWindowOptions: WindowServiceOptions = {
   title: 'Chat Agent',
-  width: 800,
-  height: 600,
+  width: 1200,
+  height: 800,
   show: false,
-  minWidth: 800,
-  minHeight: 600,
+  minWidth: 1200,
+  minHeight: 800,
   titleBarStyle: 'hidden',
   webPreferences: {
     preload: path.join(__dirname, 'preload.cjs')
@@ -44,9 +49,27 @@ export class WindowService {
 
     this.#windows.set(windowName, win)
 
+    ipcAction[windowName].on.forEach(({ channel, handle }) =>
+      ipcMain.on(channel, handle)
+    )
+
+    ipcAction[windowName].handle.forEach(({ channel, handle }) =>
+      ipcMain.handle(channel, handle)
+    )
+
     win.on('close', () => {
       this.#windows.delete(windowName)
     })
+
+    // 窗口最大化状态变化时同步给渲染进程，用于维护 URL 上的 maximized 参数
+    const sendMaximized = (maximized: boolean) =>
+      win.webContents.send(CHANNELS.ON_WINDOW_STATE, {
+        type: 'maximized',
+        data: maximized
+      })
+
+    win.on('maximize', () => sendMaximized(true))
+    win.on('unmaximize', () => sendMaximized(false))
 
     win.once('ready-to-show', () => {
       win.show()
@@ -55,13 +78,13 @@ export class WindowService {
     return win
   }
 
-  #loadWindow(window: BrowserWindow, hash: WindowName = 'main') {
+  #loadWindow(window: BrowserWindow, windowName: WindowName = 'main') {
     if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-      window.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}#${hash}`)
+      window.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}?window=${windowName}`)
     } else {
       window.loadFile(
         path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
-        { hash }
+        { query: { window: windowName } }
       )
     }
   }
@@ -83,6 +106,10 @@ export class WindowService {
 
   public getAllWindows() {
     return Array.from(this.#windows.values())
+  }
+
+  public getWindowByWebContents(webContent: Electron.WebContents) {
+    return this.getAllWindows().find(win => win.webContents === webContent)
   }
 }
 
