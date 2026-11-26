@@ -20,7 +20,7 @@ export const useInitial = () => {
   const redirectWindow = () => {
     const windowName = (new URLSearchParams(location.search).get('window') ??
       'main') as string
-    if (windowName === 'main') return navigate('/chat')
+    if (windowName === 'main') return navigate('/chat/new')
     navigate(`/${windowName}`)
   }
 

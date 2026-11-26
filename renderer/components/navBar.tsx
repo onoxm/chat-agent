@@ -34,7 +34,7 @@ export const NavBar = () => {
         activeRule: (pathname: string) => pathname.includes('/chat'),
         Icon: ({ size }) => <ChatTextIcon size={size} />,
         onClick: () => {
-          navigate('/chat')
+          if (!location.pathname.includes('/chat')) navigate('/chat/new')
           useStore.setState({
             asideShow: !asideShow
           })

@@ -3,23 +3,24 @@ import { useStore } from '@/store'
 import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react'
 import { chainClassNames, useKeyPress } from 'ono-react-element'
 import { useRef, useState } from 'react'
-import { Outlet } from 'react-router'
+import { Outlet, useMatch, useNavigate } from 'react-router'
 
 const conversations = [
-  { title: 'LangGraph 流式输出排查', time: '20:41', content: '' }
+  { title: 'LangGraph 流式输出排查', time: '20:41', id: '123' }
 ]
 
 export default () => {
+  const match = useMatch('/chat/:conversationId')
+  const navigate = useNavigate()
   const { asideShow, asideWidth } = useStore(['asideWidth', 'asideShow'])
 
   const [search, setSearch] = useState('')
 
   const searchRef = useRef<HTMLInputElement>(null)
-  // 每次新建对话递增，流式回调据此丢弃上一轮对话的残留分片
 
   useKeyPress('commandorcontrol+n', event => {
     event.preventDefault()
-    // handleNewChat();
+    navigate('/chat/new')
   })
 
   useKeyPress('commandorcontrol+k', event => {
@@ -48,7 +49,7 @@ export default () => {
           >
             <button
               type="button"
-              onClick={() => {}}
+              onClick={() => navigate('/chat/new')}
               className="mb-2 flex h-[38px] w-full items-center gap-2 rounded-[10px] bg-brand-solid px-2.5 text-[12.5px] font-600 text-on-brand shadow-[0_8px_18px_-10px_var(--color-brand-solid)] transition-colors hover:bg-brand-solid-hover"
             >
               <PlusIcon size={16} className="shrink-0" />
@@ -74,11 +75,13 @@ export default () => {
               </kbd>
             </label>
 
-            <div className="w-full flex flex-col gap-3.5">
+            <div className="w-full flex flex-col">
               {filteredConversations.length ? (
                 <ConversationGroup
-                  title={'今天'}
+                  activeId={match?.params.conversationId}
+                  groupTitle={'今天'}
                   conversations={filteredConversations}
+                  onClick={id => navigate(`/chat/${id}`)}
                 />
               ) : (
                 <p className="px-2 py-1.5 text-[11px] text-ink-400">
@@ -89,7 +92,10 @@ export default () => {
           </div>
         )}
       </AsidePanel>
-      <Outlet />
+
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <Outlet />
+      </div>
     </>
   )
 }

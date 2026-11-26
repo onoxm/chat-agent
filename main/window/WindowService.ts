@@ -1,10 +1,6 @@
 import { ipcAction } from '@main/ipc'
 import { CHANNELS, WindowName } from '@types'
-import {
-  BrowserWindow,
-  BrowserWindowConstructorOptions,
-  ipcMain
-} from 'electron'
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import path from 'node:path'
 
 type WindowServiceOptions = BrowserWindowConstructorOptions & {
@@ -50,11 +46,11 @@ export class WindowService {
     this.#windows.set(windowName, win)
 
     ipcAction[windowName].on.forEach(({ channel, handle }) =>
-      ipcMain.on(channel, handle)
+      win.webContents.ipc.on(channel, handle)
     )
 
     ipcAction[windowName].handle.forEach(({ channel, handle }) =>
-      ipcMain.handle(channel, handle)
+      win.webContents.ipc.handle(channel, handle)
     )
 
     win.on('close', () => {
